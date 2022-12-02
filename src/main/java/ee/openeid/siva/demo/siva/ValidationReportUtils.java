@@ -37,6 +37,8 @@ public final class ValidationReportUtils {
     private static final String INVALID_CONTAINER = "INVALID";
     private static final String VALID_CONTAINER = "VALID";
     private static final String ERROR_VALIDATION = "ERROR";
+    private static final String ASIC_S_CONTAINER = "ASiC-S";
+    private static final String PASSED_INDICATION = "TOTAL-PASSED";
     private static final int GENERIC_ERROR = 101;
 
     public static String getValidateFilename(final String reportJSON) {
@@ -74,6 +76,12 @@ public final class ValidationReportUtils {
             if (validSignatureCount == null || totalSignatureCount == null) {
                 LOGGER.warn("No validSignatureCount or totalSignatureCount present in response JSON");
                 return ERROR_VALIDATION;
+            }
+
+            final String signatureForm = JsonPath.read(reportJSON, "$.validationReport.validationConclusion.signatureForm");
+            if (signatureForm.equals(ASIC_S_CONTAINER)) {
+                final List<String> tokenIndications = JsonPath.read(reportJSON, "$.validationReport.validationConclusion.timeStampTokens[*].indication");
+                return tokenIndications.contains(PASSED_INDICATION) && validSignatureCount.equals(totalSignatureCount) ? VALID_CONTAINER : INVALID_CONTAINER;
             }
 
             return validSignatureCount.equals(totalSignatureCount) && totalSignatureCount > 0 ? VALID_CONTAINER : INVALID_CONTAINER;
