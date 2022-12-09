@@ -22,7 +22,7 @@ These are minimum requirements to build and develop SiVa demo project:
 * **Java JDK 11** - to compile and run SiVa demo
 * **IDE** - to develop SiVa. We recommend to use [JetBrains IntelliJ](https://www.jetbrains.com/idea/)
 * Optionally You can also install **Maven** but it is not needed because SiVa project uses Maven wrapper to install maven
-* SiVa parent project
+* **SiVa parent project** - Can be found [here](https://github.com/open-eid/SiVa)
 
 ## How to build
 
@@ -46,6 +46,12 @@ project by following these steps:
 
 ```bash
 java -jar target/siva-demo-application-X.X.X.jar
+```
+
+Another option would be to run the project directly with
+
+```bash
+./mvnw spring-boot:run
 ```
 
 Now point Your browser to URL: <http://localhost:9000>
@@ -92,7 +98,7 @@ To execute the tests from command line after application is built use:
 ./mvnw verify
 ```
 
-## Open source software used to build SiVa
+## Open source software used to build SiVa demo
 
 Full list of open source Java libraries used to build SiVa can be found in our
 [Open Source Software used page](OSS_USED.md)

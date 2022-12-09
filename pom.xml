@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.4</version>
+        <version>2.7.6</version>
     </parent>
 
     <artifactId>siva-demo-application</artifactId>
@@ -30,6 +30,10 @@
     <name>SiVa Demo Web application</name>
     <description>SiVa REST web service demo web application to test digitally signed document validation</description>
     <packaging>${packaging.type}</packaging>
+
+    <properties>
+        <pug4j.version>2.0.6</pug4j.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -64,25 +68,14 @@
 
         <!-- Spring Boot Jade -->
         <dependency>
-            <groupId>com.domingosuarez.boot</groupId>
-            <artifactId>jade4j-spring-boot-starter</artifactId>
-            <version>2.0.4.RELEASE</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>de.neuland-bfi</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>de.neuland-bfi</groupId>
+            <artifactId>pug4j</artifactId>
+            <version>${pug4j.version}</version>
         </dependency>
         <dependency>
             <groupId>de.neuland-bfi</groupId>
-            <artifactId>spring-jade4j</artifactId>
-            <version>1.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>de.neuland-bfi</groupId>
-            <artifactId>jade4j</artifactId>
-            <version>1.3.1</version>
+            <artifactId>spring-pug4j</artifactId>
+            <version>${pug4j.version}</version>
         </dependency>
 
         <dependency>
@@ -95,7 +88,7 @@
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
-            <version>3.0.6</version>
+            <version>3.1.2</version>
         </dependency>
 
         <!-- Apache commons -->
@@ -113,7 +106,7 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.13</version>
+            <version>4.5.14</version>
         </dependency>
 
         <!-- Bower Webjars -->
@@ -131,12 +124,12 @@
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>jquery</artifactId>
-            <version>3.5.1</version>
+            <version>3.6.1</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>dropzone</artifactId>
-            <version>4.2.0</version>
+            <version>5.9.2</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
@@ -157,7 +150,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.4</version>
+            <version>2.14.1</version>
         </dependency>
         <!-- Lombok -->
         <dependency>
@@ -180,7 +173,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-yaml</artifactId>
-            <version>2.13.4</version>
+            <version>2.14.1</version>
         </dependency>
 
         <!-- Testing -->
@@ -198,13 +191,13 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
-            <version>2.61.0</version>
+            <version>2.67.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -215,7 +208,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.7.4</version>
+                <version>2.7.5</version>
                 <configuration>
                     <executable>true</executable>
                 </configuration>
@@ -257,7 +250,7 @@
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-web</artifactId>
-                    <version>2.7.4</version>
+                    <version>2.7.6</version>
                     <exclusions>
                         <exclusion>
                             <groupId>org.springframework.boot</groupId>
@@ -268,7 +261,7 @@
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
-                    <version>2.7.4</version>
+                    <version>2.7.6</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -308,16 +301,4 @@
             </build>
         </profile>
     </profiles>
-
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>https://repo1.maven.org/maven2/</url>
-        </repository>
-        <repository>
-            <id>jCenter</id>
-            <url>https://jcenter.bintray.com/</url>
-        </repository>
-    </repositories>
-
 </project>
