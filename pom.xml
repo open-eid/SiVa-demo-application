@@ -33,6 +33,9 @@
 
     <properties>
         <pug4j.version>2.0.6</pug4j.version>
+
+        <spring-boot.build-image.builder>paketobuildpacks/builder:tiny</spring-boot.build-image.builder>
+        <spring-boot.build-image.imageName>${project.artifactId}:latest</spring-boot.build-image.imageName><!-- Use "latest" tag instead of version tag. -->
     </properties>
 
     <dependencies>

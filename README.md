@@ -35,26 +35,37 @@ Run following command:
 ./mvnw clean install
 ```
 
+### For Docker
+
+The following command can be used to build the docker image:
+
+```bash
+./mvnw spring-boot:build-image
+```
+
 ## How-to run
 
-SiVa demo compiles an executable JAR file that You can run after successfully building the
-project by following these steps:
+### With docker
 
-1. **First start SiVa REST and SOAP web service from the [SiVa project](https://github.com/open-eid/SiVa)**
+Follow the Docker instructions for [SiVa webapp](https://github.com/open-eid/SiVa) to run both apps at the same time.
 
-2. **Start SiVa Demo Application. NB! X.X.X denotes the version you are running.**
+### Without docker
+
+SiVa project by default compiles an executable JAR file that can be run after successfully building the project by issuing below command:
 
 ```bash
 java -jar target/siva-demo-application-X.X.X.jar
 ```
 
-Another option would be to run the project directly with
+Another option is to run it directly with:
 
-```bash
+```
 ./mvnw spring-boot:run
 ```
 
-Now point Your browser to URL: <http://localhost:9000>
+### Accessing the application
+
+After the demo application is built and running You can point Your browser to URL: <http://localhost:9000>
 
 ![Sample of validation result](docs/img/siva-responsive.png)
 
