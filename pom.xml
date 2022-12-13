@@ -26,7 +26,7 @@
 
     <artifactId>siva-demo-application</artifactId>
     <groupId>ee.openid.siva.demo</groupId>
-    <version>3.6.0</version>
+    <version>3.6.1</version>
     <name>SiVa Demo Web application</name>
     <description>SiVa REST web service demo web application to test digitally signed document validation</description>
     <packaging>${packaging.type}</packaging>
