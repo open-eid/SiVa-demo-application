@@ -78,8 +78,14 @@ public final class ValidationReportUtils {
                 return ERROR_VALIDATION;
             }
 
-            final String signatureForm = JsonPath.read(reportJSON, "$.validationReport.validationConclusion.signatureForm");
-            if (signatureForm.equals(ASIC_S_CONTAINER)) {
+            String signatureForm;
+            try {
+                signatureForm = JsonPath.read(reportJSON, "$.validationReport.validationConclusion.signatureForm");
+            } catch (PathNotFoundException e) {
+                signatureForm = null;
+            }
+
+            if (ASIC_S_CONTAINER.equals(signatureForm)) {
                 final List<String> tokenIndications = JsonPath.read(reportJSON, "$.validationReport.validationConclusion.timeStampTokens[*].indication");
                 return tokenIndications.contains(PASSED_INDICATION) && validSignatureCount.equals(totalSignatureCount) ? VALID_CONTAINER : INVALID_CONTAINER;
             }
