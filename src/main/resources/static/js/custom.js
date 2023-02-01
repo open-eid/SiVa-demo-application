@@ -31,10 +31,11 @@
     });
 
     sivaDropzone.on('sending', function (file, xhr, formData) {
-        $('#result-area, #validation-summery, #validation-warnings, #json-data-files-link, #soap-data-files-link').addClass("hide");
+        $('#result-area, #validation-summery, #validation-warnings, #json-data-files-link, #soap-data-files-link, #error').addClass("hide");
         $('#validation-warning-rows').empty();
         $('#json-data-files-report').empty();
         $('#soap-data-files-report').empty();
+        $('#request-error').empty();
         var policy = $('select#policy-select').val();
         var report = $('select#report-select').val();
         var type = $('select#type-select').val();
@@ -101,6 +102,11 @@
                 });
             }
         }
+    });
+
+    sivaDropzone.on('error', function (file, response) {
+        $('#error').removeClass('hide');
+        $('#request-error').text(JSON.stringify(response));
     });
 
     if (Cookies.get('notification') === undefined) {

@@ -51,7 +51,10 @@ block content
                 .input-group-append
                     .input-group-text
                         input#return-data-files(type="checkbox")
-
+    .row.hide#error
+        .col-md-12
+            h1 Error
+            pre.alert.alert-warning#request-error
     .row.top-buffer
         .col-md-12
             form#siva-dropzone.dropzone(action="upload", style="width: 100%", method="POST", enctype="multipart/form-data")
