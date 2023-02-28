@@ -23,14 +23,14 @@ import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.Appender;
 import ee.openeid.siva.demo.configuration.BuildInfoProperties;
 import ee.openeid.siva.demo.test.utils.TestFileUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
@@ -40,8 +40,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
-public class FilesystemBuildInfoFileLoaderTest {
+@ExtendWith(MockitoExtension.class)
+class FilesystemBuildInfoFileLoaderTest {
     private FilesystemBuildInfoFileLoader loader = new FilesystemBuildInfoFileLoader();
 
     @Mock
@@ -50,20 +50,20 @@ public class FilesystemBuildInfoFileLoaderTest {
     @Captor
     private ArgumentCaptor<LoggingEvent> captorLoggingEvent;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         logger.addAppender(mockAppender);
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterEach
+    void tearDown() {
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         logger.detachAppender(mockAppender);
     }
 
     @Test
-    public void givenValidInfoFileWillReturnCorrectBuildInfo() throws Exception {
+    void givenValidInfoFileWillReturnCorrectBuildInfo() throws Exception {
         loader.setProperties(createBuildProperties("/test-info.yml"));
         BuildInfo buildInfo = loader.loadBuildInfo();
 
@@ -75,7 +75,7 @@ public class FilesystemBuildInfoFileLoaderTest {
     }
 
     @Test
-    public void givenInvalidInfoFilePathWillReturnEmptyBuildInfo() throws Exception {
+    void givenInvalidInfoFilePathWillReturnEmptyBuildInfo() throws Exception {
         BuildInfoProperties properties = new BuildInfoProperties();
         properties.setInfoFile("wrong.info-file.yml");
 
@@ -88,7 +88,7 @@ public class FilesystemBuildInfoFileLoaderTest {
     }
 
     @Test
-    public void givenInfoFileWithMissingGithubInfoWillReturnBuildInfo() throws Exception {
+    void givenInfoFileWithMissingGithubInfoWillReturnBuildInfo() throws Exception {
         loader.setProperties(createBuildProperties("/info-missing-github.yml"));
         BuildInfo buildInfo = loader.loadBuildInfo();
 
@@ -97,7 +97,7 @@ public class FilesystemBuildInfoFileLoaderTest {
     }
 
     @Test
-    public void givenInvalidWindowsBuildInfoFilePathWillReturnEmptyBuildInfo() throws Exception {
+    void givenInvalidWindowsBuildInfoFilePathWillReturnEmptyBuildInfo() throws Exception {
         BuildInfoProperties properties = new BuildInfoProperties();
         properties.setInfoFile("C:\\invalid-build-info-path.yml");
 

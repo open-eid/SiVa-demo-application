@@ -18,12 +18,11 @@ package ee.openeid.siva.demo.siva;
 
 import ee.openeid.siva.demo.cache.UploadedFile;
 import ee.openeid.siva.demo.test.utils.TestFileUtils;
-import org.assertj.core.api.Assertions;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.ArgumentCaptor;
 import org.mockito.BDDMockito;
 import org.mockito.Captor;
@@ -31,26 +30,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.verify;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class SivaJSONValidationServiceClientTest {
+class SivaJSONValidationServiceClientTest {
 
-    @Rule
-    public TemporaryFolder testingFolder = new TemporaryFolder();
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
     @Autowired
     @Qualifier(value = "sivaJSON")
     private ValidationService validationService;
@@ -61,7 +58,7 @@ public class SivaJSONValidationServiceClientTest {
     private RestTemplate restTemplate;
 
     @Test
-    public void validRequestReturnsCorrectValidationResult() throws Exception {
+    void validRequestReturnsCorrectValidationResult(@TempDir File testingFolder) throws Exception {
         final String mockResponse = mockServiceResponse();
         final String fileContents = "Hello Testing World";
         final String filename = "testing.bdoc";
@@ -77,7 +74,7 @@ public class SivaJSONValidationServiceClientTest {
     }
 
     @Test
-    public void invalidFileTypeGivenRequestDocumentTypeIsNull() throws Exception {
+    void invalidFileTypeGivenRequestDocumentTypeIsNull(@TempDir File testingFolder) throws Exception {
         mockServiceResponse();
 
         final UploadedFile file = TestFileUtils.generateUploadFile(testingFolder, "testing.exe", "error in file");
@@ -88,15 +85,15 @@ public class SivaJSONValidationServiceClientTest {
     }
 
     @Test
-    public void inputFileIsNullThrowsException() throws Exception {
-        exception.expect(IOException.class);
-        exception.expectMessage("Invalid file object given");
-
-        validationService.validateDocument(null, null, null);
+    void inputFileIsNullThrowsException() {
+        IOException caughtException = assertThrows(
+                IOException.class, () -> validationService.validateDocument(null, null, null)
+        );
+        assertEquals("Invalid file object given", caughtException.getMessage());
     }
 
     @Test
-    public void givenRestServiceIsUnreachableReturnsGenericSystemError() throws Exception {
+    void givenRestServiceIsUnreachableReturnsGenericSystemError(@TempDir File testingFolder) throws Exception {
         final UploadedFile file = TestFileUtils.generateUploadFile(testingFolder, "testing.bdoc", "simple file");
         BDDMockito.given(restTemplate.postForObject(anyString(), any(ValidationRequest.class), any()))
                 .willThrow(new ResourceAccessException("Failed to connect to SiVa REST"));
@@ -104,8 +101,8 @@ public class SivaJSONValidationServiceClientTest {
         String result = validationService.validateDocument("", "", file);
         verify(restTemplate).postForObject(anyString(), validationRequestCaptor.capture(), any());
 
-        Assertions.assertThat(result).contains("errorCode");
-        Assertions.assertThat(result).contains("errorMessage");
+        MatcherAssert.assertThat(result, Matchers.containsString("errorCode"));
+        MatcherAssert.assertThat(result, Matchers.containsString("errorMessage"));
     }
 
     private String mockServiceResponse() {

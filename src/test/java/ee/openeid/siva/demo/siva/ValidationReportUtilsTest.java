@@ -16,7 +16,7 @@
 
 package ee.openeid.siva.demo.siva;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
@@ -25,13 +25,13 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ValidationReportUtilsTest {
+class ValidationReportUtilsTest {
 
     @Test
-    public void testConstructorIsPrivate() throws Exception {
+    void testConstructorIsPrivate() throws Exception {
         final Constructor<ValidationReportUtils> constructor = ValidationReportUtils.class.getDeclaredConstructor();
         assertTrue(Modifier.isPrivate(constructor.getModifiers()));
         constructor.setAccessible(true);
@@ -39,7 +39,7 @@ public class ValidationReportUtilsTest {
     }
 
     @Test
-    public void documentValidationWarningNotEmpty() throws Exception {
+    void documentValidationWarningNotEmpty() {
         List<String> expected = new ArrayList<>();
         expected.add("Some validation warning");
 
@@ -48,88 +48,88 @@ public class ValidationReportUtilsTest {
     }
 
     @Test
-    public void documentValidationWarningEmpty() throws Exception {
+    void documentValidationWarningEmpty() {
         final String json = "{\"validationWarnings\":[]}";
         assertEquals(Collections.emptyList(), ValidationReportUtils.getValidationWarnings(json));
     }
 
     @Test
-    public void documentNameJsonKeyPresentReturnsDocumentNameValue() throws Exception {
+    void documentNameJsonKeyPresentReturnsDocumentNameValue() {
         final String json = "{\"validationReport\":{\"validationConclusion\":{\"validatedDocument\":{\"filename\":\"valid_value.bdoc\"}}}}";
         assertEquals("valid_value.bdoc", ValidationReportUtils.getValidateFilename(json));
     }
 
     @Test
-    public void documentNameJsonKeyNotPresentReturnsEmptyString() throws Exception {
+    void documentNameJsonKeyNotPresentReturnsEmptyString() {
         final String json = "{\"randomKey\": \"randomValue\"}";
         assertEquals("", ValidationReportUtils.getValidateFilename(json));
     }
 
     @Test
-    public void documentNameJsonKeyIsNullReturnsEmptyString() throws Exception {
+    void documentNameJsonKeyIsNullReturnsEmptyString() {
         final String json = "{\"filename\": null}";
         assertEquals("", ValidationReportUtils.getValidateFilename(json));
     }
 
     @Test
-    public void overallValidationRequiredJsonKeysArePresentReturnsValid() throws Exception {
+    void overallValidationRequiredJsonKeysArePresentReturnsValid() {
         final String json = "{\"validationReport\":{\"validationConclusion\":{\"validSignaturesCount\": 1, \"signaturesCount\": 1}}}";
         assertEquals("VALID", ValidationReportUtils.getOverallValidationResult(json));
     }
 
     @Test
-    public void overallValidationRequiredJsonKeysPresentReturnsInvalid() throws Exception {
+    void overallValidationRequiredJsonKeysPresentReturnsInvalid() {
         final String json = "{\"validSignaturesCount\": 0, \"signaturesCount\": 1}";
         assertEquals("INVALID", ValidationReportUtils.getOverallValidationResult(json));
     }
 
     @Test
-    public void overallValidationRequiredJsonKeysWithValuesZeroReturnsInvalid() throws Exception {
+    void overallValidationRequiredJsonKeysWithValuesZeroReturnsInvalid() {
         final String json = "{\"validationReport\":{\"validationConclusion\":{\"validSignaturesCount\": 0, \"signaturesCount\": 0}}}";
         assertEquals("INVALID", ValidationReportUtils.getOverallValidationResult(json));
     }
 
     @Test
-    public void overallValidationRequiredKeysPresentValuesNullReturnsInvalid() throws Exception {
+    void overallValidationRequiredKeysPresentValuesNullReturnsInvalid() {
         final String json = "{\"validationReport\":{\"validationConclusion\":{\"validSignaturesCount\": null, \"signaturesCount\": null}}}";
         assertEquals("ERROR", ValidationReportUtils.getOverallValidationResult(json));
     }
 
     @Test
-    public void overallValidationRequiredKeysNotPresentReturnsInvalid() throws Exception {
+    void overallValidationRequiredKeysNotPresentReturnsInvalid() {
         final String json = "{\"randomKey\": \"randomValue\"}";
         assertEquals("INVALID", ValidationReportUtils.getOverallValidationResult(json));
     }
 
     @Test
-    public void givenNullToValidateFilenameReturnsEmptyString() throws Exception {
+    void givenNullToValidateFilenameReturnsEmptyString() {
         assertThat(ValidationReportUtils.getValidateFilename(null)).isEqualTo("");
     }
 
     @Test
-    public void givenNullJSONToOverallValidationResultWillReturnERROR() throws Exception {
+    void givenNullJSONToOverallValidationResultWillReturnERROR() {
         assertThat(ValidationReportUtils.getOverallValidationResult(null)).isEqualTo("ERROR");
     }
 
     @Test
-    public void whenHandleMissingJSONIsCalledErrorJSONWillBeReturned() throws Exception {
+    void whenHandleMissingJSONIsCalledErrorJSONWillBeReturned() throws Exception {
         assertThat(ValidationReportUtils.handleMissingJSON()).contains("errorMessage");
         assertThat(ValidationReportUtils.handleMissingJSON()).contains("No JSON found in SiVa API response");
     }
 
     @Test
-    public void givenNullJSONStringReturnsFalse() throws Exception {
+    void givenNullJSONStringReturnsFalse() {
         assertThat(ValidationReportUtils.isJSONValid(null)).isFalse();
     }
 
     @Test
-    public void givenValidJSONStringReturnsTrue() throws Exception {
+    void givenValidJSONStringReturnsTrue() {
         final String json = "{\"validSignaturesCount\": null, \"signaturesCount\": null}";
         assertThat(ValidationReportUtils.isJSONValid(json)).isTrue();
     }
 
     @Test
-    public void givenStringToIsJSONNullReturnsFalse() throws Exception {
+    void givenStringToIsJSONNullReturnsFalse() {
         assertThat(ValidationReportUtils.isJSONValid("random string")).isFalse();
     }
 }

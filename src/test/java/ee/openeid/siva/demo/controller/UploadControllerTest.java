@@ -26,11 +26,11 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import ee.openeid.siva.demo.cache.UploadFileCacheService;
 import ee.openeid.siva.demo.cache.UploadedFile;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
@@ -41,7 +41,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -53,10 +53,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(UploadController.class)
 @ImportAutoConfiguration({Wro4jAutoConfiguration.class})
-public class UploadControllerTest {
+class UploadControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -82,14 +82,14 @@ public class UploadControllerTest {
     @Captor
     private ArgumentCaptor<LoggingEvent> captorLoggingEvent;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         logger.addAppender(mockAppender);
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterEach
+    void tearDown() {
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         logger.detachAppender(mockAppender);
         reset(taskRunner);
@@ -99,14 +99,14 @@ public class UploadControllerTest {
     }
 
     @Test
-    @Ignore //TODO needs fixing, test gets stuck after removing Jade4j autoconfiguration
-    public void displayStartPageCheckPresenceOfUploadForm() throws Exception {
+    @Disabled //TODO needs fixing, test gets stuck after removing Jade4j autoconfiguration
+    void displayStartPageCheckPresenceOfUploadForm() throws Exception {
         final HtmlPage startPage = webClient.getPage("/");
         assertThat(startPage.getHtmlElementById("siva-dropzone").getAttribute("action")).isEqualTo("upload");
     }
 
     @Test
-    public void uploadPageWithFileReturnsValidationResult() throws Exception {
+    void uploadPageWithFileReturnsValidationResult() throws Exception {
         given(taskRunner.getValidationResult(any(ResultType.class)))
                 .willReturn("{\"filename\": \"random.bdoc\", \"validSignaturesCount\": 1, \"signaturesCount\": 1}");
 
@@ -133,7 +133,7 @@ public class UploadControllerTest {
     }
 
     @Test
-    public void fileUploadFailedRedirectedBackToStartPage() throws Exception {
+    void fileUploadFailedRedirectedBackToStartPage() throws Exception {
         given(hazelcastUploadFileCacheService.addUploadedFile(anyLong(), any(MultipartFile.class), anyString()))
                 .willThrow(new IOException("File upload failed"));
 
@@ -154,7 +154,7 @@ public class UploadControllerTest {
     }
 
     @Test
-    public void emptyFileUploadedRedirectsBackToStartPage() throws Exception {
+    void emptyFileUploadedRedirectsBackToStartPage() throws Exception {
         MockMultipartFile uploadFile = new MockMultipartFile(
                 "file",
                 "random.bdoc",
@@ -172,7 +172,7 @@ public class UploadControllerTest {
     }
 
     @Test
-    public void webServiceTaskRunnerThrowsInterruptedExceptionExpectLogMessage() throws Exception {
+    void webServiceTaskRunnerThrowsInterruptedExceptionExpectLogMessage() throws Exception {
         doThrow(new InterruptedException("SiVa Service failure")).when(taskRunner).run(any(), any(), any());
         MockMultipartFile uploadFile = new MockMultipartFile(
                 "file",

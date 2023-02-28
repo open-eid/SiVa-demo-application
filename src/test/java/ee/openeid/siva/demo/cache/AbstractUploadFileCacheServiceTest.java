@@ -16,20 +16,20 @@
 
 package ee.openeid.siva.demo.cache;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class AbstractUploadFileCacheServiceTest {
+class AbstractUploadFileCacheServiceTest {
 
     @Autowired
     private UploadFileCacheService fileUploadService;
@@ -39,13 +39,13 @@ public class AbstractUploadFileCacheServiceTest {
     private long timestamp;
     private String encodedFilename = "random.bdoc";
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         timestamp = System.currentTimeMillis() / SECOND_IN_MILLISECONDS;
     }
 
     @Test
-    public void uploadFileWithNameRandomTxtWillReturnFilename() throws Exception {
+    void uploadFileWithNameRandomTxtWillReturnFilename() throws Exception {
         final MockMultipartFile file = createFile();
         final UploadedFile uploadedFile = fileUploadService.addUploadedFile(timestamp, file, encodedFilename);
 
@@ -54,13 +54,13 @@ public class AbstractUploadFileCacheServiceTest {
     }
 
     @Test
-    public void uploadFileWhenNullGiven() throws Exception {
+    void uploadFileWhenNullGiven() throws Exception {
         final UploadedFile uploadedFile = fileUploadService.addUploadedFile(timestamp, null, "");
         assertThat(uploadedFile.getFilename()).isEqualTo("");
     }
 
     @Test
-    public void deleteUploadedFileWhenPresentWithoutErrors() throws Exception {
+    void deleteUploadedFileWhenPresentWithoutErrors() throws Exception {
         final MultipartFile file = createFile();
 
         fileUploadService.addUploadedFile(timestamp, file, encodedFilename);

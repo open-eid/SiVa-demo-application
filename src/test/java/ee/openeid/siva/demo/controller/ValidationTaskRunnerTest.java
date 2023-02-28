@@ -24,10 +24,10 @@ import ch.qos.logback.core.Appender;
 import ee.openeid.siva.demo.cache.UploadedFile;
 import ee.openeid.siva.demo.siva.SivaServiceType;
 import ee.openeid.siva.demo.siva.ValidationService;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 
@@ -45,8 +45,8 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
-public class ValidationTaskRunnerTest {
+@ExtendWith(SpringExtension.class)
+class ValidationTaskRunnerTest {
     @Autowired
     private ValidationTaskRunner validationTaskRunner;
 
@@ -62,8 +62,8 @@ public class ValidationTaskRunnerTest {
     @Captor
     private ArgumentCaptor<LoggingEvent> captorLoggingEvent;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         logger.addAppender(mockAppender);
 
@@ -74,14 +74,14 @@ public class ValidationTaskRunnerTest {
                 .willReturn("<soap></soap>");
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterEach
+    void tearDown() {
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         logger.detachAppender(mockAppender);
     }
 
     @Test
-    public void givenValidUploadFileReturnsValidationResultOfAllServices() throws Exception {
+    void givenValidUploadFileReturnsValidationResultOfAllServices() throws Exception {
         validationTaskRunner.run("", "", new UploadedFile());
 
         assertThat(validationTaskRunner.getValidationResult(ResultType.JSON)).isEqualTo("{}");
@@ -89,7 +89,7 @@ public class ValidationTaskRunnerTest {
     }
 
     @Test
-    public void givenClearCommandReturnsEmptyMapValueAsNull() throws Exception {
+    void givenClearCommandReturnsEmptyMapValueAsNull() throws Exception {
         validationTaskRunner.run("", "", new UploadedFile());
         validationTaskRunner.clearValidationResults();
 
@@ -97,7 +97,7 @@ public class ValidationTaskRunnerTest {
     }
 
     @Test
-    public void validationServiceThrowsExceptionLogMessageIsWritten() throws Exception {
+    void validationServiceThrowsExceptionLogMessageIsWritten() throws Exception {
         given(validationServiceJson.validateDocument(any(String.class), any(String.class), any(UploadedFile.class))).willThrow(new IOException());
         validationTaskRunner.run("", "", new UploadedFile());
 

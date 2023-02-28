@@ -19,7 +19,6 @@ package ee.openeid.siva.demo.test.utils;
 import ee.openeid.siva.demo.cache.UploadedFile;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
-import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,8 +30,8 @@ public final class TestFileUtils {
     private TestFileUtils() {
     }
 
-    public static UploadedFile generateUploadFile(TemporaryFolder testingFolder, String filename, String fileContents) throws IOException {
-        final File inputFile = testingFolder.newFile(filename);
+    public static UploadedFile generateUploadFile(File testingFolder, String filename, String fileContents) throws IOException {
+        final File inputFile = new File(testingFolder, filename);
         FileUtils.writeStringToFile(inputFile, fileContents, StandardCharsets.UTF_8);
 
         UploadedFile uploadedFile = new UploadedFile();

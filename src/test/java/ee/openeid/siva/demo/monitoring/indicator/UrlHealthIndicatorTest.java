@@ -15,25 +15,23 @@
  */
 package ee.openeid.siva.demo.monitoring.indicator;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import ee.openeid.siva.demo.monitoring.indicator.UrlHealthIndicator;
-
 import static ee.openeid.siva.demo.monitoring.indicator.UrlHealthIndicator.RESPONSE_PARAM_NAME;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(MockitoJUnitRunner.class)
-public class UrlHealthIndicatorTest {
+@ExtendWith(MockitoExtension.class)
+class UrlHealthIndicatorTest {
 
     public static final String TEST_LINK_NAME = "someLinkToExternalSystem";
     public static final String TEST_LINK_URL = "http://localhost:8080";
@@ -47,14 +45,14 @@ public class UrlHealthIndicatorTest {
     @InjectMocks
     private UrlHealthIndicator urlHealthIndicator;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         Mockito.when(externalLink.getName()).thenReturn(TEST_LINK_NAME);
         Mockito.when(externalLink.getUrl()).thenReturn(TEST_LINK_URL);
     }
 
     @Test
-    public void whenRestServiceReturnsUp(){
+    void whenRestServiceReturnsUp(){
 
         Mockito.when(restTemplate.getForObject(Mockito.eq(externalLink.getUrl()), Mockito.eq(UrlHealthIndicator.HealthStatus.class))).thenReturn(new UrlHealthIndicator.HealthStatus(Status.UP.getCode()));
 
@@ -64,7 +62,7 @@ public class UrlHealthIndicatorTest {
     }
 
     @Test
-    public void whenRestServiceReturnsDown() {
+    void whenRestServiceReturnsDown() {
 
         Mockito.when(restTemplate.getForObject(Mockito.eq(externalLink.getUrl()), Mockito.eq(UrlHealthIndicator.HealthStatus.class))).thenReturn(new UrlHealthIndicator.HealthStatus(Status.DOWN.getCode()));
 
@@ -74,7 +72,7 @@ public class UrlHealthIndicatorTest {
     }
 
     @Test
-    public void whenRestServiceConnectionIsDown() {
+    void whenRestServiceConnectionIsDown() {
 
         Mockito.when(restTemplate.getForObject(Mockito.eq(externalLink.getUrl()), Mockito.eq(UrlHealthIndicator.HealthStatus.class))).thenThrow(new RestClientException("any rest exception"));
 

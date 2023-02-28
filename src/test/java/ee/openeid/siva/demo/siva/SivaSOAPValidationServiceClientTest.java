@@ -26,10 +26,11 @@ import ee.openeid.siva.demo.cache.UploadedFile;
 import ee.openeid.siva.demo.test.utils.TestFileUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.*;
-import org.junit.rules.ExpectedException;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
@@ -39,25 +40,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 
 import static ee.openeid.siva.demo.siva.SivaSOAPValidationServiceClient.LINE_SEPARATOR;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
-public class SivaSOAPValidationServiceClientTest {
-    @Rule
-    public TemporaryFolder testingFolder = new TemporaryFolder();
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+@ExtendWith(SpringExtension.class)
+class SivaSOAPValidationServiceClientTest {
     @Autowired
     @Qualifier(value = "sivaSOAP")
     private ValidationService validationService;
@@ -72,20 +72,20 @@ public class SivaSOAPValidationServiceClientTest {
     @Captor
     private ArgumentCaptor<LoggingEvent> captorLoggingEvent;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         logger.addAppender(mockAppender);
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterEach
+    void tearDown() {
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         logger.detachAppender(mockAppender);
     }
 
     @Test
-    public void givenValidRequestWillReturnSOAPValidationReport() throws Exception {
+    void givenValidRequestWillReturnSOAPValidationReport(@TempDir File testingFolder) throws Exception {
         String response = FileUtils.readFileToString(TestFileUtils.loadTestFile("/soap_response.xml"), StandardCharsets.UTF_8);
         response = response.replaceAll("\\n", System.lineSeparator()).replaceAll("\\r\\r\\n", System.lineSeparator());
 
@@ -101,7 +101,7 @@ public class SivaSOAPValidationServiceClientTest {
     }
 
     @Test
-    public void givenValidRequestReturnsInvalidXMLReturnsEmptyString() throws Exception {
+    void givenValidRequestReturnsInvalidXMLReturnsEmptyString(@TempDir File testingFolder) throws Exception {
         serverMockResponse(StringUtils.EMPTY);
         UploadedFile uploadedFile = TestFileUtils.generateUploadFile(testingFolder, "hello.bdoc", "Valid document");
         String validatedDocument = validationService.validateDocument("", "", uploadedFile);
@@ -115,14 +115,16 @@ public class SivaSOAPValidationServiceClientTest {
     }
 
     @Test
-    public void givenNullUploadFileWillThrowException() throws Exception {
-        expectedException.expect(IOException.class);
-        expectedException.expectMessage("File not found");
-        validationService.validateDocument(null, null, null);
+    void givenNullUploadFileWillThrowException() {
+        IOException caughtException = assertThrows(
+                IOException.class, () -> validationService.validateDocument(null, null, null)
+        );
+        assertEquals("File not found", caughtException.getMessage());
+
     }
 
     @Test
-    public void validXmlSoapCreation() {
+    void validXmlSoapCreation() {
         String request = SivaSOAPValidationServiceClient.createXMLValidationRequest("dGVzdA==", "filename.asice", "Simple", "POLv3");
         String expectedRequest = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:soap=\"http://soap.webapp.siva.openeid.ee/\">" + LINE_SEPARATOR +
                 "   <soapenv:Header/>" + LINE_SEPARATOR +
@@ -137,7 +139,7 @@ public class SivaSOAPValidationServiceClientTest {
                 "      </soap:ValidateDocument>" + LINE_SEPARATOR +
                 "   </soapenv:Body>" + LINE_SEPARATOR +
                 "</soapenv:Envelope>";
-        Assert.assertEquals(expectedRequest, request);
+        assertEquals(expectedRequest, request);
     }
 
     private void serverMockResponse(String response) {

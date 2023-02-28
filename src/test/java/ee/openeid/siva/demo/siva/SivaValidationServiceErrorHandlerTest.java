@@ -21,15 +21,16 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.Appender;
-import org.assertj.core.api.Assertions;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
@@ -38,13 +39,14 @@ import org.springframework.web.client.ResponseErrorHandler;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class SivaValidationServiceErrorHandlerTest {
+@ExtendWith(MockitoExtension.class)
+class SivaValidationServiceErrorHandlerTest {
     private static final byte[] EMPTY_BODY = new byte[0];
     private ResponseErrorHandler errorHandler = new SivaValidationServiceErrorHandler();
 
@@ -57,45 +59,45 @@ public class SivaValidationServiceErrorHandlerTest {
     @Captor
     private ArgumentCaptor<LoggingEvent> captorLoggingEvent;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         logger.addAppender(mockAppender);
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterEach
+    void tearDown() {
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         logger.detachAppender(mockAppender);
     }
 
     @Test
-    public void givenNoneErrorCodeReturnsFalse() throws Exception {
+    void givenNoneErrorCodeReturnsFalse() throws Exception {
         createResponse(HttpStatus.OK);
         assertFalse(errorHandler.hasError(httpResponse));
     }
 
     @Test
-    public void givenClientErrorCodeReturnsTrue() throws Exception {
+    void givenClientErrorCodeReturnsTrue() throws Exception {
         createResponse(HttpStatus.BAD_REQUEST);
         assertTrue(errorHandler.hasError(httpResponse));
     }
 
     @Test
-    public void givenServerErrorReturnsTrue() throws Exception {
+    void givenServerErrorReturnsTrue() throws Exception {
         createResponse(HttpStatus.INTERNAL_SERVER_ERROR);
         assertTrue(errorHandler.hasError(httpResponse));
     }
 
     @Test
-    public void givenUserErrorStatusCodeWillLogWarnErrorMessage() throws Exception {
+    void givenUserErrorStatusCodeWillLogWarnErrorMessage() throws Exception {
         errorHandler.handleError(new MockClientHttpResponse(EMPTY_BODY, HttpStatus.BAD_REQUEST));
         verify(mockAppender).doAppend(captorLoggingEvent.capture());
 
         final LoggingEvent loggingEvent = captorLoggingEvent.getValue();
 
-        Assertions.assertThat(loggingEvent.getLevel()).isEqualTo(Level.ERROR);
-        Assertions.assertThat(loggingEvent.getFormattedMessage()).contains("400 BAD_REQUEST Bad Request");
+        assertEquals(loggingEvent.getLevel(), Level.ERROR);
+        MatcherAssert.assertThat(loggingEvent.getFormattedMessage(), Matchers.containsString("400 BAD_REQUEST Bad Request"));
     }
 
     private ClientHttpResponse createResponse(HttpStatus status) throws IOException {
