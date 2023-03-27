@@ -119,3 +119,12 @@ Full list of open source Java libraries used to build SiVa can be found in our
 ## Documentation
 
 Read [SiVa documentation](http://open-eid.github.io/SiVa/)
+
+TODO:
+
+On Windows machine there may be a situation where a test fails due mismatch of line separators (LF vs CRLF). Workaround is to disable a test in SivaSOAPValidationServiceClientTest class located in siva package.
+```
+@Test
+@Disabled
+void givenValidRequestWillReturnSOAPValidationReport(@TempDir File testingFolder)
+```
