@@ -43,6 +43,10 @@ The following command can be used to build the docker image:
 ./mvnw spring-boot:build-image
 ```
 
+TODO:
+
+On Windows machine there may be a situation where a test fails due to how XML files are parsed in. Workaround is to disable givenValidRequestWillReturnSOAPValidationReport() test using @Disabled tag.
+
 ## How-to run
 
 ### With docker
