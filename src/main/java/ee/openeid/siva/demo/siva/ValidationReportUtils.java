@@ -78,16 +78,14 @@ public final class ValidationReportUtils {
                 return ERROR_VALIDATION;
             }
 
-            String signatureForm;
             try {
-                signatureForm = JsonPath.read(reportJSON, "$.validationReport.validationConclusion.signatureForm");
-            } catch (PathNotFoundException e) {
-                signatureForm = null;
-            }
-
-            if (ASIC_S_CONTAINER.equals(signatureForm)) {
-                final List<String> tokenIndications = JsonPath.read(reportJSON, "$.validationReport.validationConclusion.timeStampTokens[*].indication");
-                return tokenIndications.contains(PASSED_INDICATION) && validSignatureCount.equals(totalSignatureCount) ? VALID_CONTAINER : INVALID_CONTAINER;
+                final String signatureForm = JsonPath.read(reportJSON, "$.validationReport.validationConclusion.signatureForm");
+                if (ASIC_S_CONTAINER.equals(signatureForm)) {
+                    final List<String> tokenIndications = JsonPath.read(reportJSON, "$.validationReport.validationConclusion.timeStampTokens[*].indication");
+                    return tokenIndications.contains(PASSED_INDICATION) && validSignatureCount.equals(totalSignatureCount) ? VALID_CONTAINER : INVALID_CONTAINER;
+                }
+            } catch (final PathNotFoundException e) {
+                // property does not exist in json document, do nothing
             }
 
             return validSignatureCount.equals(totalSignatureCount) && totalSignatureCount > 0 ? VALID_CONTAINER : INVALID_CONTAINER;
