@@ -42,6 +42,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,13 +89,13 @@ class SivaSOAPValidationServiceClientTest {
     @Test
     void givenValidRequestWillReturnSOAPValidationReport(@TempDir File testingFolder) throws Exception {
         String response = FileUtils.readFileToString(TestFileUtils.loadTestFile("/soap_response.xml"), StandardCharsets.UTF_8);
-        response = response.replaceAll("\\n", System.lineSeparator()).replaceAll("\\r\\r\\n", System.lineSeparator());
-
         serverMockResponse(response);
         UploadedFile uploadedFile = TestFileUtils.generateUploadFile(testingFolder, "hello.bdoc", "Valid document");
 
         String validatedDocument = validationService.validateDocument("", "", uploadedFile);
-        assertThat(validatedDocument).isEqualTo(response);
+
+        Diff xmlDiff = DiffBuilder.compare(response).withTest(validatedDocument).ignoreWhitespace().build();
+        assertThat(xmlDiff.hasDifferences()).isFalse();
 
         verify(restTemplate).postForObject(Mockito.anyString(), validationRequestCaptor.capture(), Mockito.any());
         assertThat(validationRequestCaptor.getValue()).contains("<Filename>hello.bdoc</Filename>");
