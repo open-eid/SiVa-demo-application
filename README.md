@@ -29,7 +29,7 @@ These are minimum requirements to build and develop SiVa demo project:
 ### Using Maven Wrapper
 
 Recommended way of building this project is using [Maven Wrapper](https://github.com/takari/maven-wrapper).
-Run following command:
+Run the following command:
 
 ```bash
 ./mvnw clean install
@@ -37,10 +37,10 @@ Run following command:
 
 ### For Docker
 
-The following command can be used to build the docker image:
+Alternatively, run the following command to build Docker image:
 
 ```bash
-./mvnw spring-boot:build-image
+./mvnw clean spring-boot:build-image
 ```
 
 TODO:
