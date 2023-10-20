@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.11</version>
+        <version>2.7.17</version>
     </parent>
 
     <artifactId>siva-demo-application</artifactId>
@@ -77,6 +77,28 @@
             <groupId>de.neuland-bfi</groupId>
             <artifactId>pug4j</artifactId>
             <version>${pug4j.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vladsch.flexmark</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.graalvm.sdk</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.graalvm.compiler</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.graalvm.js</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.graalvm.tools</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>de.neuland-bfi</groupId>
@@ -87,26 +109,26 @@
         <dependency>
             <groupId>eu.michael-simons</groupId>
             <artifactId>wro4j-spring-boot-starter</artifactId>
-            <version>0.11.3</version>
+            <version>0.11.4</version>
         </dependency>
 
         <!-- Caching in memory file store -->
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
-            <version>3.1.6</version>
+            <version>3.1.8</version>
         </dependency>
 
         <!-- Apache commons -->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.15</version>
+            <version>1.16.0</version>
         </dependency>
         <dependency>
             <groupId>org.zeroturnaround</groupId>
             <artifactId>zt-zip</artifactId>
-            <version>1.15</version>
+            <version>1.16</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -153,23 +175,19 @@
             <artifactId>commons-io</artifactId>
             <version>2.11.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.14.3</version>
-        </dependency>
+
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.26</version>
+            <version>1.18.30</version>
         </dependency>
 
         <!-- JSON libs -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20230227</version>
+            <version>20231013</version>
         </dependency>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
@@ -179,7 +197,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-yaml</artifactId>
-            <version>2.14.3</version>
+            <version>2.15.3</version>
         </dependency>
 
         <!-- Testing -->
