@@ -19,7 +19,7 @@ SiVa demo is digital signature validation web interface that uses SiVa APIs to v
 These are minimum requirements to build and develop SiVa demo project:
 
 * **git** - to easily download and update code. You can [download git here](https://git-scm.com/)
-* **Java JDK 11** - to compile and run SiVa demo
+* **Java JDK 17** - to compile and run SiVa demo
 * **IDE** - to develop SiVa. We recommend to use [JetBrains IntelliJ](https://www.jetbrains.com/idea/)
 * Optionally You can also install **Maven** but it is not needed because SiVa project uses Maven wrapper to install maven
 * **SiVa parent project** - Can be found [here](https://github.com/open-eid/SiVa)
