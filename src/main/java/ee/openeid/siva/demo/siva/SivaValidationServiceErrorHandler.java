@@ -31,7 +31,7 @@ public class SivaValidationServiceErrorHandler implements ResponseErrorHandler {
 
     @Override
     public boolean hasError(ClientHttpResponse clientHttpResponse) throws IOException {
-        final HttpStatus.Series series = clientHttpResponse.getStatusCode().series();
+        final HttpStatus.Series series = ((HttpStatus) clientHttpResponse.getStatusCode()).series();
         return HttpStatus.Series.CLIENT_ERROR == series
                 || HttpStatus.Series.SERVER_ERROR == series;
     }

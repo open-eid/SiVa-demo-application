@@ -16,15 +16,11 @@
 
 package ee.openeid.siva.demo.configuration;
 
+import ee.openeid.siva.demo.monitoring.indicator.UrlHealthIndicator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
-
-import ee.openeid.siva.demo.monitoring.indicator.UrlHealthIndicator;
-import ee.openeid.siva.demo.monitoring.util.ManifestReader;
-import lombok.RequiredArgsConstructor;
-
-import javax.servlet.ServletContext;
 
 @Configuration
 @RequiredArgsConstructor

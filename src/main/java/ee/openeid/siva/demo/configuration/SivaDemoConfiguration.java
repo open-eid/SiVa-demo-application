@@ -21,11 +21,14 @@ import ee.openeid.siva.demo.ci.info.FilesystemBuildInfoFileLoader;
 import ee.openeid.siva.demo.monitoring.util.ManifestReader;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.config.ConnectionConfig;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.io.HttpClientConnectionManager;
+import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -36,11 +39,9 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
-import javax.servlet.ServletContext;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableConfigurationProperties({
@@ -56,14 +57,12 @@ public class SivaDemoConfiguration {
     public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
         return getBaseSslRestTemplateBuilder(restTemplateBuilder)
                 .additionalMessageConverters(new StringHttpMessageConverter(StandardCharsets.UTF_8))
-                .setConnectTimeout(Duration.ofMillis(10000))
-                .setReadTimeout(Duration.ofMillis(10000))
                 .build();
     }
     
     @Bean
-    public ManifestReader manifestReader(ServletContext servletContext) {
-        return new ManifestReader(servletContext);
+    public ManifestReader manifestReader() {
+        return new ManifestReader();
     }
 
     @SneakyThrows
@@ -75,7 +74,17 @@ public class SivaDemoConfiguration {
                 .build();
         SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext,
                 NoopHostnameVerifier.INSTANCE);
-        HttpClient httpClient = HttpClients.custom().setSSLSocketFactory(socketFactory).build();
+        ConnectionConfig connectionConfig = ConnectionConfig.custom()
+                .setConnectTimeout(10000, TimeUnit.MILLISECONDS)
+                .setSocketTimeout(10000, TimeUnit.MILLISECONDS)
+                .build();
+        HttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
+                .setSSLSocketFactory(socketFactory)
+                .setDefaultConnectionConfig(connectionConfig)
+                .build();
+        HttpClient httpClient = HttpClients.custom()
+                .setConnectionManager(connectionManager)
+                .build();
 
         return restTemplateBuilder.requestFactory(() -> new HttpComponentsClientHttpRequestFactory(httpClient));
     }

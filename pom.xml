@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.17</version>
+        <version>3.2.1</version>
     </parent>
 
     <artifactId>siva-demo-application</artifactId>
@@ -34,13 +34,9 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <pug4j.version>2.0.6</pug4j.version>
 
         <spring-boot.build-image.builder>paketobuildpacks/builder:tiny</spring-boot.build-image.builder>
         <spring-boot.build-image.imageName>${project.artifactId}:latest</spring-boot.build-image.imageName><!-- Use "latest" tag instead of version tag. -->
-
-        <!--        override springboot dependency-->
-        <snakeyaml.version>2.0</snakeyaml.version>
     </properties>
 
     <dependencies>
@@ -77,41 +73,14 @@
         <!-- Spring Boot Jade -->
         <dependency>
             <groupId>de.neuland-bfi</groupId>
-            <artifactId>pug4j</artifactId>
-            <version>${pug4j.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.vladsch.flexmark</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.graalvm.sdk</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.graalvm.compiler</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.graalvm.js</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.graalvm.tools</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>de.neuland-bfi</groupId>
             <artifactId>spring-pug4j</artifactId>
-            <version>${pug4j.version}</version>
+            <version>3.2.0</version>
         </dependency>
 
         <dependency>
             <groupId>eu.michael-simons</groupId>
             <artifactId>wro4j-spring-boot-starter</artifactId>
-            <version>0.11.4</version>
+            <version>0.12.2</version>
         </dependency>
 
         <!-- Caching in memory file store -->
@@ -134,9 +103,9 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.14</version>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.3</version>
         </dependency>
 
         <!-- Bower Webjars -->

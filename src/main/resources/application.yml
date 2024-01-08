@@ -5,9 +5,10 @@ server:
   port: 9000
   compression:
     enabled: true
-  session:
-    cookie:
-      http-only: false
+  servlet:
+    session:
+      cookie:
+        http-only: false
 spring:
   servlet:
     multipart:
