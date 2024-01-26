@@ -1,39 +1,38 @@
 # We use open source software
 
-SiVa is built using only open source software. Below are all SiVa applications and open source
-Java libraries used by each applications. Libraries are grouped by license.
+SiVa-Demo Application is built using only open source software. Below are all open source
+Java libraries used by the application. Libraries are grouped by licenses.
 
-Libraries license information was obtained using below command:
+Libraries license information was obtained using the following command:
 
 ```bash
-./mvnw project-info-reports:dependencies
+./mvnw license:add-third-party
 ```
 
-* **Apache License, Version 2.0:** JBoss Logging 3, rxjava-spring-boot-starter, Apache Commons Codec, Apache Commons Collections, Apache Commons Lang,
-Apache HttpClient, Apache HttpClient Mime, Apache HttpCore, AssertJ fluent assertions, Hibernate Validator Engine, HtmlUnit, HtmlUnit NekoHtml, SnakeYAML,
-Spring AOP, Spring Beans, Spring Boot, Spring Boot Actuator, Spring Boot Actuator Docs, Spring Boot Actuator Starter, Spring Boot AutoConfigure, Spring Boot
-Cache Starter, Spring Boot Developer Tools, Spring Boot Logging Starter, Spring Boot Security Starter, Spring Boot Starter, Spring Boot Test, Spring Boot
-Test Auto-Configure, Spring Boot Test Starter, Spring Boot Tomcat Starter, Spring Boot Web Starter, Spring Context, Spring Context Support, Spring Core,
-Spring Expression Language (SpEL), Spring HATEOAS, Spring TestContext Framework, Spring Web, Spring Web MVC, Wro4j Spring Boot Starter, tomcat-annotations-api,
-tomcat-embed-core, tomcat-embed-el, tomcat-embed-websocket, ASM based accessors helper used by json-smart, Apache Commons Logging, Bean Validation API, Caffeine
-cache, ClassMate, Commons IO, Commons JEXL, ConcurrentLinkedHashMap, JSON Small and Fast Parser, JSONassert, Jackson-annotations, Jackson-core,
-Jackson-dataformat-YAML, Json Path, Spring Boot jade4j Starter, XML Commons External Components XML APIs, Xalan Java, Xalan Java Serializer, Xerces2-j, ZT Zip,
-jackson-databind, rxjava, spring-security-config, spring-security-core, spring-security-web, wro4j core
-* **Eclipse Public License 1.0:** JUnit
-* **Mozilla Public License version 2.0:** HtmlUnit Core JS
-* **MIT License:** JCL 1.2 implemented over SLF4J, JUL to SLF4J bridge, SLF4J API Module, dropzone, jade4j, spring-jade4j, Mockito, Project Lombok, bootstrap, jquery, js-cookie, tether
-* **New BSD License:** Hamcrest Core, Hamcrest library
-* **Apache 2:** Objenesis, parboiled-core, parboiled-java, pegdown
-* **BSD:** ASM Analysis, ASM Core, ASM Tree, ASM Util, jcabi-log, jcabi-manifests
-* **Apache Software Licenses:** Log4j Implemented Over SLF4J
-* **GNU General Public License, Version 2 with the Classpath Exception:**
-* **BSD 3-Clause:** highlightjs
-* **Apache Software License - Version 2.0:** Jetty :: Asynchronous HTTP Client, Jetty :: Http Utility, Jetty :: IO Utility, Jetty :: Utilities, Jetty :: Websocket :: API, Jetty :: Websocket :: Client, Jetty :: Websocket :: Common, Jetty :: XML utilities
-* **The SAX License:** XML Commons External Components XML APIs
-* **The W3C License:** XML Commons External Components XML APIs
-* **The JSON License:** JSON in Java
-* **European Union Public License 1.1:** SiVa Demo Web application
-* **GNU Lesser General Public License:** CSS Parser, Logback Classic Module, Logback Core Module
-* **Eclipse Public License - Version 1.0:** Jetty :: Asynchronous HTTP Client, Jetty :: Http Utility, Jetty :: IO Utility, Jetty :: Utilities, Jetty :: Websocket :: API, Jetty :: Websocket :: Client, Jetty :: Websocket :: Common, Jetty :: XML utilities
-* **Eclipse Public License - v 1.0:** Logback Classic Module, Logback Core Module
-* **The W3C Software License:** Simple API for CSS
+Lists of 25 third-party dependencies.
+
+    (The Apache Software License, Version 2.0) Jackson-dataformat-YAML (com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.3 - https://github.com/FasterXML/jackson-dataformats-text)
+    (Apache License, Version 2.0) Caffeine cache (com.github.ben-manes.caffeine:caffeine:3.1.8 - https://github.com/ben-manes/caffeine)
+    (The Apache Software License, Version 2.0) json-path (com.jayway.jsonpath:json-path:2.8.0 - https://github.com/jayway/JsonPath)
+    (BSD) jcabi-manifests (com.jcabi:jcabi-manifests:1.1 - http://www.jcabi.com/jcabi-manifests)
+    (Apache-2.0) Apache Commons Codec (commons-codec:commons-codec:1.16.0 - https://commons.apache.org/proper/commons-codec/)
+    (Apache License, Version 2.0) Apache Commons IO (commons-io:commons-io:2.11.0 - https://commons.apache.org/proper/commons-io/)
+    (MIT License) spring-pug4j (de.neuland-bfi:spring-pug4j:3.2.0 - https://github.com/neuland/spring-pug4j)
+    (Apache License, Version 2.0) Wro4j Spring Boot Starter (eu.michael-simons:wro4j-spring-boot-starter:0.12.2 - http://projects.spring.io/spring-boot/)
+    (Apache License, Version 2.0) HtmlUnit (net.sourceforge.htmlunit:htmlunit:2.70.0 - http://htmlunit.sourceforge.net)
+    (Apache License, Version 2.0) Apache HttpClient (org.apache.httpcomponents.client5:httpclient5:5.3 - https://hc.apache.org/httpcomponents-client-5.0.x/5.3/httpclient5/)
+    (Public Domain) JSON in Java (org.json:json:20231013 - https://github.com/douglascrockford/JSON-java)
+    (The MIT License) Project Lombok (org.projectlombok:lombok:1.18.30 - https://projectlombok.org)
+    (Apache License, Version 2.0) spring-boot-starter-actuator (org.springframework.boot:spring-boot-starter-actuator:3.2.1 - https://spring.io/projects/spring-boot)
+    (Apache License, Version 2.0) spring-boot-starter-cache (org.springframework.boot:spring-boot-starter-cache:3.2.1 - https://spring.io/projects/spring-boot)
+    (Apache License, Version 2.0) spring-boot-starter-security (org.springframework.boot:spring-boot-starter-security:3.2.1 - https://spring.io/projects/spring-boot)
+    (Apache License, Version 2.0) spring-boot-starter-test (org.springframework.boot:spring-boot-starter-test:3.2.1 - https://spring.io/projects/spring-boot)
+    (Apache License, Version 2.0) spring-boot-starter-tomcat (org.springframework.boot:spring-boot-starter-tomcat:3.2.1 - https://spring.io/projects/spring-boot)
+    (Apache License, Version 2.0) spring-boot-starter-web (org.springframework.boot:spring-boot-starter-web:3.2.1 - https://spring.io/projects/spring-boot)
+    (Apache License, Version 2.0) Spring HATEOAS (org.springframework.hateoas:spring-hateoas:2.2.0 - https://github.com/spring-projects/spring-hateoas)
+    (MIT License) dropzone (org.webjars:dropzone:5.9.2 - http://nexus.sonatype.org/oss-repository-hosting.html/dropzone)
+    (MIT) bootstrap (org.webjars.bower:bootstrap:4.5.1 - https://www.webjars.org)
+    (BSD 3-Clause) highlightjs (org.webjars.bower:highlightjs:9.4.0 - http://webjars.org)
+    (MIT) jquery (org.webjars.bower:jquery:3.6.1 - https://www.webjars.org)
+    (MIT) js-cookie (org.webjars.bower:js-cookie:2.2.0 - http://webjars.org)
+    (The Apache Software License, Version 2.0) ZT Zip (org.zeroturnaround:zt-zip:1.16 - https://github.com/zeroturnaround/zt-zip)
