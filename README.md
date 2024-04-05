@@ -71,7 +71,7 @@ Another option is to run it directly with:
 
 After the demo application is built and running You can point Your browser to URL: <http://localhost:9000>.
 
-- SiVa Demo Application UI allows to upload 1 file at a time and with maximum file size 11 MiB (SiVa default maximum file size is 10 MB).
+- SiVa Demo Application UI allows to upload 1 file at a time and with maximum file size 11 MiB.
 
 ![Sample of validation result](docs/img/siva-responsive.png)
 
