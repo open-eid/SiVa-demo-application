@@ -76,7 +76,7 @@ public class SivaDemoConfiguration {
                 NoopHostnameVerifier.INSTANCE);
         ConnectionConfig connectionConfig = ConnectionConfig.custom()
                 .setConnectTimeout(10000, TimeUnit.MILLISECONDS)
-                .setSocketTimeout(10000, TimeUnit.MILLISECONDS)
+                .setSocketTimeout(120000, TimeUnit.MILLISECONDS)
                 .build();
         HttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
                 .setSSLSocketFactory(socketFactory)
