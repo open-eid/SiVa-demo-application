@@ -22,7 +22,6 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.Appender;
 import ee.openeid.siva.demo.cache.UploadedFile;
-import ee.openeid.siva.demo.siva.SivaServiceType;
 import ee.openeid.siva.demo.siva.ValidationService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,8 +49,8 @@ class ValidationTaskRunnerTest {
     @Autowired
     private ValidationTaskRunner validationTaskRunner;
 
-    @MockBean(name = SivaServiceType.JSON_SERVICE)
-    private ValidationService validationServiceJson;
+    @MockBean
+    private ValidationService validationService;
 
     @Mock
     private Appender<ILoggingEvent> mockAppender;
@@ -64,7 +63,7 @@ class ValidationTaskRunnerTest {
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         logger.addAppender(mockAppender);
 
-        given(validationServiceJson.validateDocument(any(String.class), any(String.class), any(UploadedFile.class)))
+        given(validationService.validateDocument(any(String.class), any(String.class), any(UploadedFile.class)))
                 .willReturn("{}");
     }
 
@@ -91,7 +90,7 @@ class ValidationTaskRunnerTest {
 
     @Test
     void validationServiceThrowsExceptionLogMessageIsWritten() throws Exception {
-        given(validationServiceJson.validateDocument(any(String.class), any(String.class), any(UploadedFile.class))).willThrow(new IOException());
+        given(validationService.validateDocument(any(String.class), any(String.class), any(UploadedFile.class))).willThrow(new IOException());
         validationTaskRunner.run("", "", new UploadedFile());
 
         verify(mockAppender).doAppend(captorLoggingEvent.capture());

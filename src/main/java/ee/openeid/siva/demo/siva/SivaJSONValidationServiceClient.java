@@ -27,7 +27,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
-@Service(value = SivaServiceType.JSON_SERVICE)
+@Service
 public class SivaJSONValidationServiceClient implements ValidationService {
     private static final int GENERIC_ERROR_CODE = 101;
 

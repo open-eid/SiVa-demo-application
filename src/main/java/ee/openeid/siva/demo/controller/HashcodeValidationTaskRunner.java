@@ -18,11 +18,9 @@ package ee.openeid.siva.demo.controller;
 
 import ee.openeid.siva.demo.cache.UploadedFile;
 import ee.openeid.siva.demo.siva.HashcodeValidationService;
-import ee.openeid.siva.demo.siva.SivaServiceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -41,7 +39,7 @@ import static ee.openeid.siva.demo.controller.ResultType.JSON;
 class HashcodeValidationTaskRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(ValidationTaskRunner.class);
     private final Map<ResultType, String> validationResults = new ConcurrentHashMap<>();
-    private HashcodeValidationService jsonValidationService;
+    private HashcodeValidationService validationService;
 
     void run(String policy, String report, UploadedFile uploadedFile) throws InterruptedException {
         Map<ResultType, HashcodeValidationService> serviceMap = getValidationServiceMap();
@@ -61,7 +59,7 @@ class HashcodeValidationTaskRunner {
     }
 
     private Map<ResultType, HashcodeValidationService> getValidationServiceMap() {
-        return Stream.of(addEntry(JSON, jsonValidationService))
+        return Stream.of(addEntry(JSON, validationService))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
@@ -89,8 +87,7 @@ class HashcodeValidationTaskRunner {
     }
 
     @Autowired
-    @Qualifier(value = SivaServiceType.JSON_HASHCODE_SERVICE)
-    public void setJsonValidationService(HashcodeValidationService jsonValidationService) {
-        this.jsonValidationService = jsonValidationService;
+    public void setValidationService(HashcodeValidationService validationService) {
+        this.validationService = validationService;
     }
 }

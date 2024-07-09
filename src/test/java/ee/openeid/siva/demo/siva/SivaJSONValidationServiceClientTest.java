@@ -49,7 +49,6 @@ import static org.mockito.Mockito.verify;
 class SivaJSONValidationServiceClientTest {
 
     @Autowired
-    @Qualifier(value = "sivaJSON")
     private ValidationService validationService;
     @Captor
     private ArgumentCaptor<ValidationRequest> validationRequestCaptor;

@@ -26,7 +26,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
-@Service(value = SivaServiceType.JSON_DATAFILES_SERVICE)
+@Service
 public class SivaJSONDataFilesServiceClient implements DataFilesService {
 
     private static final int GENERIC_ERROR_CODE = 101;

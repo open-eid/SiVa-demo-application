@@ -23,7 +23,6 @@ import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.Appender;
 import ee.openeid.siva.demo.cache.UploadedFile;
 import ee.openeid.siva.demo.siva.DataFilesService;
-import ee.openeid.siva.demo.siva.SivaServiceType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,8 +50,8 @@ class DataFilesTaskRunnerTest {
     @Autowired
     private DataFilesTaskRunner dataFilesTaskRunner;
 
-    @MockBean(name = SivaServiceType.JSON_DATAFILES_SERVICE)
-    private DataFilesService jsonDataFilesService;
+    @MockBean
+    private DataFilesService dataFilesService;
 
     @Mock
     private Appender<ILoggingEvent> mockAppender;
@@ -65,7 +64,7 @@ class DataFilesTaskRunnerTest {
         final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         logger.addAppender(mockAppender);
 
-        given(jsonDataFilesService.getDataFiles(any(UploadedFile.class)))
+        given(dataFilesService.getDataFiles(any(UploadedFile.class)))
                 .willReturn("{}");
     }
 
@@ -92,7 +91,7 @@ class DataFilesTaskRunnerTest {
 
     @Test
     void validationServiceThrowsExceptionLogMessageIsWritten() throws Exception {
-        given(jsonDataFilesService.getDataFiles(any(UploadedFile.class))).willThrow(new IOException());
+        given(dataFilesService.getDataFiles(any(UploadedFile.class))).willThrow(new IOException());
         dataFilesTaskRunner.run(new UploadedFile());
 
         verify(mockAppender).doAppend(captorLoggingEvent.capture());

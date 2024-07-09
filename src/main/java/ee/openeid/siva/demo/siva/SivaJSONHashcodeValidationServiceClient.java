@@ -29,7 +29,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.Collections;
 
-@Service(value = SivaServiceType.JSON_HASHCODE_SERVICE)
+@Service
 public class SivaJSONHashcodeValidationServiceClient implements HashcodeValidationService {
 
     private static final int GENERIC_ERROR_CODE = 101;

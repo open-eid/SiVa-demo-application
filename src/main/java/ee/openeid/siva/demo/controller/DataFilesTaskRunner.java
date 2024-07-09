@@ -18,11 +18,9 @@ package ee.openeid.siva.demo.controller;
 
 import ee.openeid.siva.demo.cache.UploadedFile;
 import ee.openeid.siva.demo.siva.DataFilesService;
-import ee.openeid.siva.demo.siva.SivaServiceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -40,7 +38,7 @@ public class DataFilesTaskRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DataFilesTaskRunner.class);
 
-    private DataFilesService jsonDataFilesService;
+    private DataFilesService dataFilesService;
 
     private final Map<ResultType, String> dataFilesResults = new ConcurrentHashMap<>();
 
@@ -55,7 +53,7 @@ public class DataFilesTaskRunner {
     }
 
     private Map<ResultType, DataFilesService> getDataFilesServiceMap() {
-        return Stream.of(addEntry(ResultType.JSON, jsonDataFilesService))
+        return Stream.of(addEntry(ResultType.JSON, dataFilesService))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
@@ -88,9 +86,8 @@ public class DataFilesTaskRunner {
     }
 
     @Autowired
-    @Qualifier(value = SivaServiceType.JSON_DATAFILES_SERVICE)
-    public void setJsonDataFilesService(final DataFilesService jsonDataFilesService) {
-        this.jsonDataFilesService = jsonDataFilesService;
+    public void setDataFilesService(final DataFilesService dataFilesService) {
+        this.dataFilesService = dataFilesService;
     }
 
 }
