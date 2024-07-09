@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 - 2024 Riigi Infosüsteemi Amet
+ * Copyright 2019 - 2024 Riigi Infosüsteemi Amet
  *
  * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
@@ -16,18 +16,21 @@
 
 package ee.openeid.siva.demo.siva;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.openeid.siva.demo.cache.UploadedFile;
 import ee.openeid.siva.demo.configuration.SivaServiceProperties;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.Collections;
 
-@Service(value = SivaServiceType.JSON_DATAFILES_SERVICE)
-public class SivaJSONDataFilesServiceClient implements DataFilesService {
+@Service
+public class SivaHashcodeValidationServiceClient implements HashcodeValidationService {
 
     private static final int GENERIC_ERROR_CODE = 101;
 
@@ -36,19 +39,21 @@ public class SivaJSONDataFilesServiceClient implements DataFilesService {
     private SivaValidationServiceErrorHandler errorHandler;
 
     @Override
-    public String getDataFiles(UploadedFile file) throws IOException {
-        if (file == null) {
-            throw new IOException("Invalid file object given");
-        }
-
+    public String validateDocument(String policy, String report, UploadedFile file) throws IOException {
+        HashcodeValidationRequest validationRequest = new HashcodeValidationRequest();
         final String base64EncodedFile = file.getEncodedFile();
+        if (StringUtils.isNotBlank(policy))
+            validationRequest.setSignaturePolicy(policy);
+        if (StringUtils.isNotBlank(report))
+            validationRequest.setReportType(report);
+        SignatureFile signatureFile = new SignatureFile();
+        signatureFile.setSignature(base64EncodedFile);
+        validationRequest.setSignatureFiles(Collections.singletonList(signatureFile));
 
-        final DataFilesRequest dataFilesRequest = new DataFilesRequest();
-        dataFilesRequest.setDocument(base64EncodedFile);
-        dataFilesRequest.setFilename(file.getFilename());
         try {
             restTemplate.setErrorHandler(errorHandler);
-            return restTemplate.postForObject(properties.getServiceHost() + properties.getJsonDataFilesServicePath(), dataFilesRequest, String.class);
+            String fullUrl = properties.getServiceHost() + properties.getHashcodeServicePath();
+            return restTemplate.postForObject(fullUrl, validationRequest, String.class);
         } catch (ResourceAccessException ce) {
             String errorMessage = "Connection to web service failed. Make sure You have configured SiVa web service correctly";
             return new ObjectMapper().writer().writeValueAsString(new ServiceError(GENERIC_ERROR_CODE, errorMessage));

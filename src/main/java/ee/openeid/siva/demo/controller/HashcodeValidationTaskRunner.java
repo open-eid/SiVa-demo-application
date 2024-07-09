@@ -18,87 +18,47 @@ package ee.openeid.siva.demo.controller;
 
 import ee.openeid.siva.demo.cache.UploadedFile;
 import ee.openeid.siva.demo.siva.HashcodeValidationService;
-import ee.openeid.siva.demo.siva.SivaServiceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static ee.openeid.siva.demo.controller.ResultType.JSON;
-import static ee.openeid.siva.demo.controller.ResultType.SOAP;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 class HashcodeValidationTaskRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(ValidationTaskRunner.class);
-    private final Map<ResultType, String> validationResults = new ConcurrentHashMap<>();
-    private HashcodeValidationService jsonValidationService;
-    private HashcodeValidationService soapValidationService;
+    private final AtomicReference<String> validationResult = new AtomicReference<>();
+    private HashcodeValidationService validationService;
 
     void run(String policy, String report, UploadedFile uploadedFile) throws InterruptedException {
-        Map<ResultType, HashcodeValidationService> serviceMap = getValidationServiceMap();
-
-        ExecutorService executorService = Executors.newFixedThreadPool(serviceMap.size());
-        serviceMap.entrySet().forEach(entry -> executorService.submit(() -> validateFile(entry.getValue(), entry.getKey(), report, uploadedFile, policy)));
-
-        executorService.shutdown();
-        executorService.awaitTermination(2, TimeUnit.MINUTES);
-    }
-
-    private static SimpleImmutableEntry<ResultType, HashcodeValidationService> addEntry(
-            ResultType resultType,
-            HashcodeValidationService validationService
-    ) {
-        return new SimpleImmutableEntry<>(resultType, validationService);
-    }
-
-    private Map<ResultType, HashcodeValidationService> getValidationServiceMap() {
-        return Stream.of(addEntry(JSON, jsonValidationService), addEntry(SOAP, soapValidationService))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        validateFile(validationService, report, uploadedFile, policy);
     }
 
     private void validateFile(
             HashcodeValidationService validationService,
-            ResultType resultType,
             String report,
             UploadedFile uploadedFile,
             String policy
     ) {
         try {
-            String validationResult = validationService.validateDocument(policy, report,uploadedFile);
-            validationResults.put(resultType, validationResult);
+            validationResult.set(validationService.validateDocument(policy, report,uploadedFile));
         } catch (IOException e) {
             LOGGER.warn("Uploaded file validation failed with error: {}", e.getMessage(), e);
         }
     }
 
-    String getValidationResult(ResultType resultType) {
-        return validationResults.get(resultType);
+    public String getValidationResult() {
+        return validationResult.get();
     }
 
-    void clearValidationResults() {
-        validationResults.clear();
-    }
-
-    @Autowired
-    @Qualifier(value = SivaServiceType.JSON_HASHCODE_SERVICE)
-    public void setJsonValidationService(HashcodeValidationService jsonValidationService) {
-        this.jsonValidationService = jsonValidationService;
+    public void clearValidationResults() {
+        validationResult.set(null);
     }
 
     @Autowired
-    @Qualifier(value = SivaServiceType.SOAP_HASHCODE_SERVICE)
-    public void setSoapValidationService(HashcodeValidationService soapValidationService) {
-        this.soapValidationService = soapValidationService;
+    public void setValidationService(HashcodeValidationService validationService) {
+        this.validationService = validationService;
     }
 }

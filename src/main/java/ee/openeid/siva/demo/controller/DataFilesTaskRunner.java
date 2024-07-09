@@ -18,86 +18,44 @@ package ee.openeid.siva.demo.controller;
 
 import ee.openeid.siva.demo.cache.UploadedFile;
 import ee.openeid.siva.demo.siva.DataFilesService;
-import ee.openeid.siva.demo.siva.SivaServiceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.AbstractMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class DataFilesTaskRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DataFilesTaskRunner.class);
-
-    private DataFilesService jsonDataFilesService;
-    private DataFilesService soapDataFilesService;
-
-    private final Map<ResultType, String> dataFilesResults = new ConcurrentHashMap<>();
+    private final AtomicReference<String> dataFilesResult = new AtomicReference<>();
+    private DataFilesService dataFilesService;
 
     public void run(UploadedFile uploadedFile) throws InterruptedException {
-        Map<ResultType, DataFilesService> serviceMap = getDataFilesServiceMap();
-
-        ExecutorService executorService = Executors.newFixedThreadPool(serviceMap.size());
-        serviceMap.forEach((key, value) -> executorService.submit(() -> getDataFiles(value, key, uploadedFile)));
-
-        executorService.shutdown();
-        executorService.awaitTermination(2, TimeUnit.MINUTES);
+        getDataFiles(uploadedFile);
     }
 
-    private Map<ResultType, DataFilesService> getDataFilesServiceMap() {
-        return Stream.of(addEntry(ResultType.JSON, jsonDataFilesService), addEntry(ResultType.SOAP, soapDataFilesService))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
-
-    private static AbstractMap.SimpleImmutableEntry<ResultType, DataFilesService> addEntry(
-            ResultType resultType,
-            DataFilesService dataFilesService
-    ) {
-        return new AbstractMap.SimpleImmutableEntry<>(resultType, dataFilesService);
-    }
-
-    private void getDataFiles(
-            DataFilesService dataFilesService,
-            ResultType resultType,
-            UploadedFile uploadedFile
-    ) {
+    private void getDataFiles(UploadedFile uploadedFile) {
         try {
-            String dataFilesResult = dataFilesService.getDataFiles(uploadedFile);
-            dataFilesResults.put(resultType, dataFilesResult);
+            dataFilesResult.set(dataFilesService.getDataFiles(uploadedFile));
         } catch (IOException e) {
             LOGGER.warn("Uploaded file data files extraction failed with error: {}", e.getMessage(), e);
         }
     }
 
     public void clearDataFilesResults() {
-        dataFilesResults.clear();
+        dataFilesResult.set(null);
     }
 
-    public String getDataFilesResult(ResultType resultType) {
-        return dataFilesResults.get(resultType);
-    }
-
-    @Autowired
-    @Qualifier(value = SivaServiceType.JSON_DATAFILES_SERVICE)
-    public void setJsonDataFilesService(final DataFilesService jsonDataFilesService) {
-        this.jsonDataFilesService = jsonDataFilesService;
+    public String getDataFilesResult() {
+        return dataFilesResult.get();
     }
 
     @Autowired
-    @Qualifier(value = SivaServiceType.SOAP_DATAFILES_SERVICE)
-    public void setSoapDataFilesService(DataFilesService soapDataFilesService) {
-        this.soapDataFilesService = soapDataFilesService;
+    public void setDataFilesService(final DataFilesService dataFilesService) {
+        this.dataFilesService = dataFilesService;
     }
 
 }

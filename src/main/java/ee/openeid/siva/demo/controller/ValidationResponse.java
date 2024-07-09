@@ -24,9 +24,7 @@ import java.util.List;
 public class ValidationResponse {
     private String filename;
     private String jsonValidationResult;
-    private String soapValidationResult;
     private String overAllValidationResult;
     private List<String> validationWarnings;
     private String jsonDataFilesResult;
-    private String soapDataFilesResult;
 }

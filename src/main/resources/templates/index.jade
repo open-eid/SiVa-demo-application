@@ -78,24 +78,14 @@ block content
             ul#response-tabs.nav.nav-tabs(role="tablist")
                 li.nav-item(role="presentation")
                     a.nav-link.active(href="#json", aria-controls="json", role="tab", data-toggle="tab") JSON
-                li.nav-item(role="presentation")
-                    a.nav-link(href="#soap", aria-controls="soap", role="tab", data-toggle="tab") SOAP
                 li.nav-item(role="presentation")#json-data-files-link
                     a.nav-link(href="#json-data-files", aria-controls="json-data-files", role="tab", data-toggle="tab") JSON Data Files
-                li.nav-item(role="presentation")#soap-data-files-link
-                    a.nav-link(href="#soap-data-files", aria-controls="soap-data-files", role="tab", data-toggle="tab") SOAP Data Files
             .tab-content
                 #json.tab-pane.active(role="tabpanel")
                     pre
                         code.json#validation-report
-                #soap.tab-pane(role="tabpanel")
-                    pre
-                        code.xml#soap-validation-report
                 #json-data-files.tab-pane(role="tabpanel")
                     pre
                         code.json#json-data-files-report
-                #soap-data-files.tab-pane(role="tabpanel")
-                    pre
-                        code.xml#soap-data-files-report
     +footerBuildInfo
 

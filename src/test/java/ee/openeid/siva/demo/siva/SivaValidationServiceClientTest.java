@@ -46,10 +46,9 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class SivaJSONValidationServiceClientTest {
+class SivaValidationServiceClientTest {
 
     @Autowired
-    @Qualifier(value = "sivaJSON")
     private ValidationService validationService;
     @Captor
     private ArgumentCaptor<ValidationRequest> validationRequestCaptor;

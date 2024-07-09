@@ -113,7 +113,7 @@ class UploadControllerTest {
 
     @Test
     void uploadPageWithFileReturnsValidationResult() throws Exception {
-        given(taskRunner.getValidationResult(any(ResultType.class)))
+        given(taskRunner.getValidationResult())
                 .willReturn("{\"filename\": \"random.bdoc\", \"validSignaturesCount\": 1, \"signaturesCount\": 1}");
 
         UploadedFile uploadedFile = new UploadedFile();
@@ -199,7 +199,5 @@ class UploadControllerTest {
         LoggingEvent loggingEvent = captorLoggingEvent.getValue();
 
         assertThat(loggingEvent.getLevel()).isEqualTo(Level.WARN);
-        assertThat(loggingEvent.getMessage()).contains("SiVa SOAP or REST service call failed with error:");
-
     }
 }

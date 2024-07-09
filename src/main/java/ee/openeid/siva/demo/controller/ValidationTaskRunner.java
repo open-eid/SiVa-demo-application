@@ -17,88 +17,47 @@
 package ee.openeid.siva.demo.controller;
 
 import ee.openeid.siva.demo.cache.UploadedFile;
-import ee.openeid.siva.demo.siva.SivaServiceType;
 import ee.openeid.siva.demo.siva.ValidationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static ee.openeid.siva.demo.controller.ResultType.JSON;
-import static ee.openeid.siva.demo.controller.ResultType.SOAP;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 class ValidationTaskRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(ValidationTaskRunner.class);
-    private final Map<ResultType, String> validationResults = new ConcurrentHashMap<>();
-    private ValidationService jsonValidationService;
-    private ValidationService soapValidationService;
+    private final AtomicReference<String> validationResult = new AtomicReference<>();
+    private ValidationService validationService;
 
     void run(String policy, String report, UploadedFile uploadedFile) throws InterruptedException {
-        Map<ResultType, ValidationService> serviceMap = getValidationServiceMap();
-
-        ExecutorService executorService = Executors.newFixedThreadPool(serviceMap.size());
-        serviceMap.entrySet().forEach(entry -> executorService.submit(() -> validateFile(entry.getValue(), entry.getKey(), report, uploadedFile, policy)));
-
-        executorService.shutdown();
-        executorService.awaitTermination(2, TimeUnit.MINUTES);
-    }
-
-    private static SimpleImmutableEntry<ResultType, ValidationService> addEntry(
-            ResultType resultType,
-            ValidationService validationService
-    ) {
-        return new SimpleImmutableEntry<>(resultType, validationService);
-    }
-
-    private Map<ResultType, ValidationService> getValidationServiceMap() {
-        return Stream.of(addEntry(JSON, jsonValidationService), addEntry(SOAP, soapValidationService))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        validateFile(report, uploadedFile, policy);
     }
 
     private void validateFile(
-            ValidationService validationService,
-            ResultType resultType,
             String report,
             UploadedFile uploadedFile,
             String policy
     ) {
         try {
-            String validationResult = validationService.validateDocument(policy, report,uploadedFile);
-            validationResults.put(resultType, validationResult);
+            validationResult.set(validationService.validateDocument(policy, report, uploadedFile));
         } catch (IOException e) {
             LOGGER.warn("Uploaded file validation failed with error: {}", e.getMessage(), e);
         }
     }
 
-    String getValidationResult(ResultType resultType) {
-        return validationResults.get(resultType);
+    public String getValidationResult() {
+        return validationResult.get();
     }
 
-    void clearValidationResults() {
-        validationResults.clear();
-    }
-
-    @Autowired
-    @Qualifier(value = SivaServiceType.JSON_SERVICE)
-    public void setJsonValidationService(final ValidationService jsonValidationService) {
-        this.jsonValidationService = jsonValidationService;
+    public void clearValidationResults() {
+        validationResult.set(null);
     }
 
     @Autowired
-    @Qualifier(value = SivaServiceType.SOAP_SERVICE)
-    public void setSoapValidationService(ValidationService soapValidationService) {
-        this.soapValidationService = soapValidationService;
+    public void setValidationService(final ValidationService validationService) {
+        this.validationService = validationService;
     }
 }
