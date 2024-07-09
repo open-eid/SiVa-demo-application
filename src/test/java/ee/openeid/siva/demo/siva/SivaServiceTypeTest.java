@@ -37,9 +37,4 @@ class SivaServiceTypeTest {
     void givenJSONServiceNameReturnsTrue() {
         assertThat(SivaServiceType.JSON_SERVICE).isEqualTo("sivaJSON");
     }
-
-    @Test
-    void givenSOAPServiceNameReturnsTrue() {
-        assertThat(SivaServiceType.SOAP_SERVICE).isEqualTo("sivaSOAP");
-    }
 }

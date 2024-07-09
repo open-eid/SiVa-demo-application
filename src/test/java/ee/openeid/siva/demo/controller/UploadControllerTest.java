@@ -199,7 +199,5 @@ class UploadControllerTest {
         LoggingEvent loggingEvent = captorLoggingEvent.getValue();
 
         assertThat(loggingEvent.getLevel()).isEqualTo(Level.WARN);
-        assertThat(loggingEvent.getMessage()).contains("SiVa SOAP or REST service call failed with error:");
-
     }
 }

@@ -54,9 +54,6 @@ class DataFilesTaskRunnerTest {
     @MockBean(name = SivaServiceType.JSON_DATAFILES_SERVICE)
     private DataFilesService jsonDataFilesService;
 
-    @MockBean(name = SivaServiceType.SOAP_DATAFILES_SERVICE)
-    private DataFilesService soapDataFilesService;
-
     @Mock
     private Appender<ILoggingEvent> mockAppender;
 
@@ -70,9 +67,6 @@ class DataFilesTaskRunnerTest {
 
         given(jsonDataFilesService.getDataFiles(any(UploadedFile.class)))
                 .willReturn("{}");
-
-        given(soapDataFilesService.getDataFiles(any(UploadedFile.class)))
-                .willReturn("<soap></soap>");
     }
 
     @AfterEach
@@ -86,7 +80,6 @@ class DataFilesTaskRunnerTest {
         dataFilesTaskRunner.run(new UploadedFile());
 
         assertThat(dataFilesTaskRunner.getDataFilesResult(ResultType.JSON)).isEqualTo("{}");
-        assertThat(dataFilesTaskRunner.getDataFilesResult(ResultType.SOAP)).isEqualTo("<soap></soap>");
     }
 
     @Test

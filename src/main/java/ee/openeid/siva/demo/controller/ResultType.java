@@ -17,5 +17,5 @@
 package ee.openeid.siva.demo.controller;
 
 public enum ResultType {
-    JSON, SOAP
+    JSON
 }

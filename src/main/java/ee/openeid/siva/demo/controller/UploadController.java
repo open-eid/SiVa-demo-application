@@ -90,7 +90,7 @@ class UploadController {
             LOGGER.warn("File upload problem", e);
             model.addAttribute("error", "File upload failed with message: " + e.getMessage());
         } catch (InterruptedException e) {
-            LOGGER.warn("SiVa SOAP or REST service call failed with error: {}", e.getMessage(), e);
+            LOGGER.warn("SiVa REST service call failed with error: {}", e.getMessage(), e);
             Thread.currentThread().interrupt();
         } finally {
             fileUploadService.deleteUploadedFile(timestamp);
@@ -107,35 +107,20 @@ class UploadController {
         return validationTaskRunner.getValidationResult(ResultType.JSON);
     }
 
-    private String getSoapValidationResult() {
-        return validationTaskRunner.getValidationResult(ResultType.SOAP);
-    }
-
     private String getHashcodeJsonValidationResult() {
         return hashcodeValidationTaskRunner.getValidationResult(ResultType.JSON);
-    }
-
-    private String getHashcodeSoapValidationResult() {
-        return hashcodeValidationTaskRunner.getValidationResult(ResultType.SOAP);
     }
 
     private String getJsonDataFilesResult() {
         return dataFilesTaskRunner.getDataFilesResult(ResultType.JSON);
     }
 
-    private String getSoapDataFilesResult() {
-        return dataFilesTaskRunner.getDataFilesResult(ResultType.SOAP);
-    }
-
     private void setModelFlashAttributes(Model model, boolean isHashcode) throws JsonProcessingException {
         String jsonValidationResult;
-        String soapValidationResult;
         if (isHashcode) {
             jsonValidationResult = getHashcodeJsonValidationResult();
-            soapValidationResult = getHashcodeSoapValidationResult();
         } else {
             jsonValidationResult = getJsonValidationResult();
-            soapValidationResult = getSoapValidationResult();
         }
 
         final ValidationResponse response = new ValidationResponse();
@@ -145,13 +130,10 @@ class UploadController {
         response.setValidationWarnings(getValidationWarnings(jsonValidationResult));
         final String output = isJSONValid(jsonValidationResult) ? jsonValidationResult : handleMissingJSON();
         response.setJsonValidationResult(new JSONObject(output).toString(JSON_INDENT_FACTOR));
-        response.setSoapValidationResult(soapValidationResult);
 
         String jsonDataFilesResult = getJsonDataFilesResult();
-        String soapDataFilesResult = getSoapDataFilesResult();
 
         response.setJsonDataFilesResult(jsonDataFilesResult != null ? new JSONObject(jsonDataFilesResult).toString(JSON_INDENT_FACTOR) : null);
-        response.setSoapDataFilesResult(soapDataFilesResult);
 
         model.addAttribute(response);
     }

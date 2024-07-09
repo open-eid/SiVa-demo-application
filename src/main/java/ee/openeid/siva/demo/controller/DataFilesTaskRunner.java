@@ -41,7 +41,6 @@ public class DataFilesTaskRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataFilesTaskRunner.class);
 
     private DataFilesService jsonDataFilesService;
-    private DataFilesService soapDataFilesService;
 
     private final Map<ResultType, String> dataFilesResults = new ConcurrentHashMap<>();
 
@@ -56,7 +55,7 @@ public class DataFilesTaskRunner {
     }
 
     private Map<ResultType, DataFilesService> getDataFilesServiceMap() {
-        return Stream.of(addEntry(ResultType.JSON, jsonDataFilesService), addEntry(ResultType.SOAP, soapDataFilesService))
+        return Stream.of(addEntry(ResultType.JSON, jsonDataFilesService))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
@@ -92,12 +91,6 @@ public class DataFilesTaskRunner {
     @Qualifier(value = SivaServiceType.JSON_DATAFILES_SERVICE)
     public void setJsonDataFilesService(final DataFilesService jsonDataFilesService) {
         this.jsonDataFilesService = jsonDataFilesService;
-    }
-
-    @Autowired
-    @Qualifier(value = SivaServiceType.SOAP_DATAFILES_SERVICE)
-    public void setSoapDataFilesService(DataFilesService soapDataFilesService) {
-        this.soapDataFilesService = soapDataFilesService;
     }
 
 }

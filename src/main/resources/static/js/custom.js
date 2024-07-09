@@ -31,10 +31,9 @@
     });
 
     sivaDropzone.on('sending', function (file, xhr, formData) {
-        $('#result-area, #validation-summery, #validation-warnings, #json-data-files-link, #soap-data-files-link, #error').addClass("hide");
+        $('#result-area, #validation-summery, #validation-warnings, #json-data-files-link, #error').addClass("hide");
         $('#validation-warning-rows').empty();
         $('#json-data-files-report').empty();
-        $('#soap-data-files-report').empty();
         $('#request-error').empty();
         var policy = $('select#policy-select').val();
         var report = $('select#report-select').val();
@@ -64,23 +63,10 @@
             hljs.highlightBlock(block);
         });
 
-        $('#soap-validation-report').text(response.soapValidationResult);
-        $('#soap-validation-report').each(function (i, block) {
-            hljs.highlightBlock(block);
-        });
-
         if (!jQuery.isEmptyObject(response.jsonDataFilesResult)) {
             $('#json-data-files-link').removeClass("hide");
             $('#json-data-files-report').text(response.jsonDataFilesResult);
             $('#json-data-files-report').each(function (i, block) {
-                hljs.highlightBlock(block);
-            });
-        }
-
-        if (!jQuery.isEmptyObject(response.soapDataFilesResult)) {
-            $('#soap-data-files-link').removeClass("hide");
-            $('#soap-data-files-report').text(response.soapDataFilesResult);
-            $('#soap-data-files-report').each(function (i, block) {
                 hljs.highlightBlock(block);
             });
         }

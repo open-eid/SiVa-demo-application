@@ -43,9 +43,6 @@ Alternatively, run the following command to build Docker image:
 ./mvnw clean spring-boot:build-image
 ```
 
-TODO:
-
-On Windows machine there may be a situation where a test fails due to how XML files are parsed in. Workaround is to disable givenValidRequestWillReturnSOAPValidationReport() test using @Disabled tag.
 
 ## How-to run
 
@@ -123,12 +120,3 @@ Full list of open source Java libraries used to build SiVa can be found in our
 ## Documentation
 
 Read [SiVa documentation](http://open-eid.github.io/SiVa/)
-
-TODO:
-
-On Windows machine there may be a situation where a test fails due mismatch of line separators (LF vs CRLF). Workaround is to disable a test in SivaSOAPValidationServiceClientTest class located in siva package.
-```
-@Test
-@Disabled
-void givenValidRequestWillReturnSOAPValidationReport(@TempDir File testingFolder)
-```

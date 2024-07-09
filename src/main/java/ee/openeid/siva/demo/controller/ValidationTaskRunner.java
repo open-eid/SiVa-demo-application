@@ -36,14 +36,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static ee.openeid.siva.demo.controller.ResultType.JSON;
-import static ee.openeid.siva.demo.controller.ResultType.SOAP;
 
 @Service
 class ValidationTaskRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(ValidationTaskRunner.class);
     private final Map<ResultType, String> validationResults = new ConcurrentHashMap<>();
     private ValidationService jsonValidationService;
-    private ValidationService soapValidationService;
 
     void run(String policy, String report, UploadedFile uploadedFile) throws InterruptedException {
         Map<ResultType, ValidationService> serviceMap = getValidationServiceMap();
@@ -63,7 +61,7 @@ class ValidationTaskRunner {
     }
 
     private Map<ResultType, ValidationService> getValidationServiceMap() {
-        return Stream.of(addEntry(JSON, jsonValidationService), addEntry(SOAP, soapValidationService))
+        return Stream.of(addEntry(JSON, jsonValidationService))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
@@ -94,11 +92,5 @@ class ValidationTaskRunner {
     @Qualifier(value = SivaServiceType.JSON_SERVICE)
     public void setJsonValidationService(final ValidationService jsonValidationService) {
         this.jsonValidationService = jsonValidationService;
-    }
-
-    @Autowired
-    @Qualifier(value = SivaServiceType.SOAP_SERVICE)
-    public void setSoapValidationService(ValidationService soapValidationService) {
-        this.soapValidationService = soapValidationService;
     }
 }

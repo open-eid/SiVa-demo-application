@@ -50,9 +50,6 @@ class ValidationTaskRunnerTest {
     @Autowired
     private ValidationTaskRunner validationTaskRunner;
 
-    @MockBean(name = SivaServiceType.SOAP_SERVICE)
-    private ValidationService validationServiceSoap;
-
     @MockBean(name = SivaServiceType.JSON_SERVICE)
     private ValidationService validationServiceJson;
 
@@ -69,9 +66,6 @@ class ValidationTaskRunnerTest {
 
         given(validationServiceJson.validateDocument(any(String.class), any(String.class), any(UploadedFile.class)))
                 .willReturn("{}");
-
-        given(validationServiceSoap.validateDocument(any(String.class), any(String.class), any(UploadedFile.class)))
-                .willReturn("<soap></soap>");
     }
 
     @AfterEach
@@ -85,7 +79,6 @@ class ValidationTaskRunnerTest {
         validationTaskRunner.run("", "", new UploadedFile());
 
         assertThat(validationTaskRunner.getValidationResult(ResultType.JSON)).isEqualTo("{}");
-        assertThat(validationTaskRunner.getValidationResult(ResultType.SOAP)).isEqualTo("<soap></soap>");
     }
 
     @Test
