@@ -19,6 +19,7 @@ package ee.openeid.siva.demo.siva;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.openeid.siva.demo.cache.UploadedFile;
 import ee.openeid.siva.demo.configuration.SivaServiceProperties;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -27,8 +28,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 
 @Service
-public class SivaJSONDataFilesServiceClient implements DataFilesService {
-
+public class SivaValidationServiceClient implements ValidationService {
     private static final int GENERIC_ERROR_CODE = 101;
 
     private SivaServiceProperties properties;
@@ -36,19 +36,26 @@ public class SivaJSONDataFilesServiceClient implements DataFilesService {
     private SivaValidationServiceErrorHandler errorHandler;
 
     @Override
-    public String getDataFiles(UploadedFile file) throws IOException {
+    public String validateDocument(final String policy, final String report, final UploadedFile file) throws IOException {
         if (file == null) {
             throw new IOException("Invalid file object given");
         }
 
         final String base64EncodedFile = file.getEncodedFile();
 
-        final DataFilesRequest dataFilesRequest = new DataFilesRequest();
-        dataFilesRequest.setDocument(base64EncodedFile);
-        dataFilesRequest.setFilename(file.getFilename());
+        final ValidationRequest validationRequest = new ValidationRequest();
+        validationRequest.setDocument(base64EncodedFile);
+        if (StringUtils.isNotBlank(policy))
+            validationRequest.setSignaturePolicy(policy);
+        if (StringUtils.isNotBlank(report))
+            validationRequest.setReportType(report);
+        final String filename = file.getFilename();
+        validationRequest.setFilename(filename);
+
         try {
             restTemplate.setErrorHandler(errorHandler);
-            return restTemplate.postForObject(properties.getServiceHost() + properties.getJsonDataFilesServicePath(), dataFilesRequest, String.class);
+            String fullUrl = properties.getServiceHost() + properties.getServicePath();
+            return restTemplate.postForObject(fullUrl, validationRequest, String.class);
         } catch (ResourceAccessException ce) {
             String errorMessage = "Connection to web service failed. Make sure You have configured SiVa web service correctly";
             return new ObjectMapper().writer().writeValueAsString(new ServiceError(GENERIC_ERROR_CODE, errorMessage));

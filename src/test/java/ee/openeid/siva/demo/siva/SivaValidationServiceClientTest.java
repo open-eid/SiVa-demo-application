@@ -46,7 +46,7 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class SivaJSONValidationServiceClientTest {
+class SivaValidationServiceClientTest {
 
     @Autowired
     private ValidationService validationService;

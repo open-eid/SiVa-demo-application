@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 @Service
-public class SivaJSONHashcodeValidationServiceClient implements HashcodeValidationService {
+public class SivaHashcodeValidationServiceClient implements HashcodeValidationService {
 
     private static final int GENERIC_ERROR_CODE = 101;
 
@@ -52,7 +52,7 @@ public class SivaJSONHashcodeValidationServiceClient implements HashcodeValidati
 
         try {
             restTemplate.setErrorHandler(errorHandler);
-            String fullUrl = properties.getServiceHost() + properties.getJsonHashcodeServicePath();
+            String fullUrl = properties.getServiceHost() + properties.getHashcodeServicePath();
             return restTemplate.postForObject(fullUrl, validationRequest, String.class);
         } catch (ResourceAccessException ce) {
             String errorMessage = "Connection to web service failed. Make sure You have configured SiVa web service correctly";
