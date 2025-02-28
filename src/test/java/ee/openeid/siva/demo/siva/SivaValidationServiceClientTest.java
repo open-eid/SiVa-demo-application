@@ -27,16 +27,15 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.BDDMockito;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.util.Base64Utils;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -53,7 +52,7 @@ class SivaValidationServiceClientTest {
     @Captor
     private ArgumentCaptor<ValidationRequest> validationRequestCaptor;
 
-    @MockBean
+    @MockitoBean
     private RestTemplate restTemplate;
 
     @Test
@@ -69,7 +68,7 @@ class SivaValidationServiceClientTest {
         verify(restTemplate).postForObject(anyString(), validationRequestCaptor.capture(), any());
 
         assertEquals(filename, validationRequestCaptor.getValue().getFilename());
-        assertEquals(Base64Utils.encodeToString(fileContents.getBytes()), validationRequestCaptor.getValue().getDocument());
+        assertEquals(Base64.getEncoder().encodeToString(fileContents.getBytes()), validationRequestCaptor.getValue().getDocument());
     }
 
     @Test

@@ -22,10 +22,10 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.Appender;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import ee.openeid.siva.demo.cache.UploadFileCacheService;
 import ee.openeid.siva.demo.cache.UploadedFile;
+import org.htmlunit.WebClient;
+import org.htmlunit.html.HtmlPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -38,9 +38,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -53,7 +53,12 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(UploadController.class)
@@ -69,16 +74,16 @@ class UploadControllerTest {
     @Autowired
     private WebClient webClient;
 
-    @MockBean
+    @MockitoBean
     private ValidationTaskRunner taskRunner;
 
-    @MockBean
+    @MockitoBean
     private DataFilesTaskRunner dataFilesTaskRunner;
 
-    @MockBean
+    @MockitoBean
     private HashcodeValidationTaskRunner hashcodeValidationTaskRunner;
 
-    @MockBean
+    @MockitoBean
     private UploadFileCacheService hazelcastUploadFileCacheService;
 
     @Mock
@@ -105,7 +110,7 @@ class UploadControllerTest {
     }
 
     @Test
-    @Disabled //TODO needs fixing, test gets stuck after removing Jade4j autoconfiguration
+    @Disabled //TODO SIVA-831
     void displayStartPageCheckPresenceOfUploadForm() throws Exception {
         final HtmlPage startPage = webClient.getPage("/");
         assertThat(startPage.getHtmlElementById("siva-dropzone").getAttribute("action")).isEqualTo("upload");

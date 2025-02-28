@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.5</version>
+        <version>3.4.3</version>
     </parent>
 
     <artifactId>siva-demo-application</artifactId>
@@ -74,20 +74,20 @@
         <dependency>
             <groupId>de.neuland-bfi</groupId>
             <artifactId>spring-pug4j</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.1</version>
         </dependency>
 
         <dependency>
             <groupId>eu.michael-simons</groupId>
             <artifactId>wro4j-spring-boot-starter</artifactId>
-            <version>0.12.2</version>
+            <version>0.15.1</version>
         </dependency>
 
         <!-- Caching in memory file store -->
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
-            <version>3.1.8</version>
+            <version>3.2.0</version>
         </dependency>
 
         <!-- Apache commons -->
@@ -155,7 +155,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20240303</version>
+            <version>20250107</version>
         </dependency>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
@@ -179,9 +179,9 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>net.sourceforge.htmlunit</groupId>
+            <groupId>org.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
-            <version>2.70.0</version>
+            <version>4.10.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -192,7 +192,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>2.4.0</version>
+                <version>2.5.0</version>
                 <configuration>
                     <includeTransitiveDependencies>false</includeTransitiveDependencies>
                 </configuration>
@@ -214,7 +214,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.4.1</version>
+                <version>3.4.2</version>
                 <configuration>
                     <archive>
                         <manifestEntries>
