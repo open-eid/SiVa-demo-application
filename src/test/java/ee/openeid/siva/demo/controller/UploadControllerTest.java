@@ -25,10 +25,8 @@ import ch.qos.logback.core.Appender;
 import ee.openeid.siva.demo.cache.UploadFileCacheService;
 import ee.openeid.siva.demo.cache.UploadedFile;
 import org.htmlunit.WebClient;
-import org.htmlunit.html.HtmlPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -107,13 +105,6 @@ class UploadControllerTest {
         reset(hashcodeValidationTaskRunner);
         reset(dataFilesTaskRunner);
         Thread.interrupted();
-    }
-
-    @Test
-    @Disabled //TODO SIVA-831
-    void displayStartPageCheckPresenceOfUploadForm() throws Exception {
-        final HtmlPage startPage = webClient.getPage("/");
-        assertThat(startPage.getHtmlElementById("siva-dropzone").getAttribute("action")).isEqualTo("upload");
     }
 
     @Test
