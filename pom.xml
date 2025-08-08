@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.3</version>
+        <version>3.5.4</version>
     </parent>
 
     <artifactId>siva-demo-application</artifactId>
@@ -36,11 +36,11 @@
         <maven.compiler.target>17</maven.compiler.target>
 
         <bootstrap.version>4.5.1</bootstrap.version>
-        <caffeine.version>3.2.1</caffeine.version>
-        <commons-io.version>2.19.0</commons-io.version>
+        <caffeine.version>3.2.2</caffeine.version>
+        <commons-io.version>2.20.0</commons-io.version>
         <dropzone.version>5.9.2</dropzone.version>
         <highlightjs.version>9.4.0</highlightjs.version>
-        <htmlunit.version>4.13.0</htmlunit.version>
+        <htmlunit.version>4.14.0</htmlunit.version>
         <jcabi-manifests.version>2.1.0</jcabi-manifests.version>
         <jquery.version>3.6.1</jquery.version>
         <js-cookie.version>2.2.0</js-cookie.version>
@@ -50,9 +50,13 @@
         <zt-zip.version>1.17</zt-zip.version>
 
         <dependency-check-maven.version>9.1.0</dependency-check-maven.version>
-        <license-maven-plugin.version>2.5.0</license-maven-plugin.version>
+        <license-maven-plugin.version>2.6.0</license-maven-plugin.version>
         <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
         <maven-war-plugin.version>3.4.0</maven-war-plugin.version>
+
+        <!-- Override vulnerable transitive dependencies -->
+        <!-- TODO: review this list whenever Spring Boot or direct dependencies are updated -->
+        <commons-lang3.version>3.18.0</commons-lang3.version><!-- CVE-2025-48924 -->
     </properties>
 
     <dependencies>
