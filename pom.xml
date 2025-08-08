@@ -34,6 +34,25 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+
+        <bootstrap.version>4.5.1</bootstrap.version>
+        <caffeine.version>3.2.1</caffeine.version>
+        <commons-io.version>2.19.0</commons-io.version>
+        <dropzone.version>5.9.2</dropzone.version>
+        <highlightjs.version>9.4.0</highlightjs.version>
+        <htmlunit.version>4.13.0</htmlunit.version>
+        <jcabi-manifests.version>2.1.0</jcabi-manifests.version>
+        <jquery.version>3.6.1</jquery.version>
+        <js-cookie.version>2.2.0</js-cookie.version>
+        <json.version>20250517</json.version>
+        <spring-pug4j.version>3.3.1</spring-pug4j.version>
+        <wro4j-spring-boot-starter.version>0.17.1</wro4j-spring-boot-starter.version>
+        <zt-zip.version>1.17</zt-zip.version>
+
+        <dependency-check-maven.version>9.1.0</dependency-check-maven.version>
+        <license-maven-plugin.version>2.5.0</license-maven-plugin.version>
+        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
+        <maven-war-plugin.version>3.4.0</maven-war-plugin.version>
     </properties>
 
     <dependencies>
@@ -64,27 +83,27 @@
         <dependency>
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-manifests</artifactId>
-            <version>2.1.0</version>
+            <version>${jcabi-manifests.version}</version>
         </dependency>
 
         <!-- Spring Boot Jade -->
         <dependency>
             <groupId>de.neuland-bfi</groupId>
             <artifactId>spring-pug4j</artifactId>
-            <version>3.3.1</version>
+            <version>${spring-pug4j.version}</version>
         </dependency>
 
         <dependency>
             <groupId>eu.michael-simons</groupId>
             <artifactId>wro4j-spring-boot-starter</artifactId>
-            <version>0.17.1</version>
+            <version>${wro4j-spring-boot-starter.version}</version>
         </dependency>
 
         <!-- Caching in memory file store -->
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
-            <version>3.2.1</version>
+            <version>${caffeine.version}</version>
         </dependency>
 
         <!-- Apache commons -->
@@ -95,7 +114,7 @@
         <dependency>
             <groupId>org.zeroturnaround</groupId>
             <artifactId>zt-zip</artifactId>
-            <version>1.17</version>
+            <version>${zt-zip.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -107,7 +126,7 @@
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>bootstrap</artifactId>
-            <version>4.5.1</version>
+            <version>${bootstrap.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.webjars.bower</groupId>
@@ -118,28 +137,28 @@
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>jquery</artifactId>
-            <version>3.6.1</version>
+            <version>${jquery.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>dropzone</artifactId>
-            <version>5.9.2</version>
+            <version>${dropzone.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>highlightjs</artifactId>
-            <version>9.4.0</version>
+            <version>${highlightjs.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>js-cookie</artifactId>
-            <version>2.2.0</version>
+            <version>${js-cookie.version}</version>
         </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.19.0</version>
+            <version>${commons-io.version}</version>
         </dependency>
 
         <!-- Lombok -->
@@ -152,7 +171,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20250517</version>
+            <version>${json.version}</version>
         </dependency>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
@@ -178,7 +197,7 @@
         <dependency>
             <groupId>org.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
-            <version>4.13.0</version>
+            <version>${htmlunit.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -189,7 +208,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>2.5.0</version>
+                <version>${license-maven-plugin.version}</version>
                 <configuration>
                     <includeTransitiveDependencies>false</includeTransitiveDependencies>
                 </configuration>
@@ -214,7 +233,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.4.2</version>
+                <version>${maven-jar-plugin.version}</version>
                 <configuration>
                     <archive>
                         <manifestEntries>
@@ -274,7 +293,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-war-plugin</artifactId>
-                        <version>3.4.0</version>
+                        <version>${maven-war-plugin.version}</version>
                         <configuration>
                             <archive>
                                 <manifestEntries>
@@ -299,7 +318,7 @@
                     <plugin>
                         <groupId>org.owasp</groupId>
                         <artifactId>dependency-check-maven</artifactId>
-                        <version>9.1.0</version>
+                        <version>${dependency-check-maven.version}</version>
                         <configuration>
                             <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
                             <failOnError>false</failOnError>
