@@ -57,6 +57,10 @@
         <!-- Override vulnerable transitive dependencies -->
         <!-- TODO: review this list whenever Spring Boot or direct dependencies are updated -->
         <commons-lang3.version>3.18.0</commons-lang3.version><!-- CVE-2025-48924 -->
+
+        <!-- Property values here can be overridden from command line, but plugin <configuration> values below can't be -->
+        <imageName>${project.artifactId}:latest</imageName>
+        <githubMirror>https://github.com</githubMirror>
     </properties>
 
     <dependencies>
@@ -229,7 +233,14 @@
                 <configuration>
                     <executable>true</executable>
                     <image>
-                        <name>${project.artifactId}:latest</name>
+                        <name>${imageName}</name>
+                        <env>
+                            <!-- Avoid excessive downloads in build environments with restricted internet access -->
+                            <BP_SPRING_CLOUD_BINDINGS_DISABLED>true</BP_SPRING_CLOUD_BINDINGS_DISABLED>
+                            <!-- Enable overriding GitHub mirror -->
+                            <BP_DEPENDENCY_MIRROR_GITHUB_COM>${githubMirror}</BP_DEPENDENCY_MIRROR_GITHUB_COM>
+                            <BP_RESPONSE_HEADER_TIMEOUT>60</BP_RESPONSE_HEADER_TIMEOUT>
+                        </env>
                     </image>
                 </configuration>
                 <executions>
