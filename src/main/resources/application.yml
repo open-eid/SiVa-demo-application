@@ -30,6 +30,8 @@ management:
   endpoint:
     health:
       show-details: "ALWAYS"
+      probes:
+        enabled: true
 
 wro4j:
   filterUrl: /owr
