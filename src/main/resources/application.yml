@@ -1,6 +1,3 @@
-siva:
-  service:
-    service-host: http://siva.localhost:8080
 server:
   compression:
     enabled: true
