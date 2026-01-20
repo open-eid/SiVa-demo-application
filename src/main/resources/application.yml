@@ -1,10 +1,22 @@
+management:
+  health:
+    diskspace:
+      enabled: false
+  endpoints:
+    web:
+      base-path: /monitoring
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+      probes:
+        enabled: true
+
 server:
   compression:
     enabled: true
-  servlet:
-    session:
-      cookie:
-        http-only: false
+
 spring:
   servlet:
     multipart:
@@ -14,20 +26,6 @@ spring:
   cache:
     caffeine:
       spec: maximumSize=100,expireAfterAccess=20s
-management:
-  health:
-    diskspace:
-      enabled: false
-  endpoints:
-    web:
-      exposure:
-        include: health
-      base-path: /monitoring
-  endpoint:
-    health:
-      show-details: "ALWAYS"
-      probes:
-        enabled: true
 
 wro4j:
   filterUrl: /owr
