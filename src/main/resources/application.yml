@@ -2,7 +2,6 @@ siva:
   service:
     service-host: http://siva.localhost:8080
 server:
-  port: 9000
   compression:
     enabled: true
   servlet:

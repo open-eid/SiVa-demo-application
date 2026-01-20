@@ -55,13 +55,13 @@ Follow the Docker instructions for [SiVa webapp](https://github.com/open-eid/SiV
 SiVa project by default compiles an executable JAR file that can be run after successfully building the project by issuing below command:
 
 ```bash
-java -jar target/siva-demo-application-X.X.X.jar
+java -Dserver.port=9000 -Dsiva.service.service-host=http://siva.localhost:8080 -jar target/siva-demo-application-X.X.X.jar
 ```
 
 Another option is to run it directly with:
 
 ```
-./mvnw spring-boot:run
+./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Dserver.port=9000 -Dsiva.service.service-host=http://siva.localhost:8080"
 ```
 
 ### Accessing the application
