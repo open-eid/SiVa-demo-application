@@ -32,12 +32,14 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.mock.http.client.MockClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 
 import java.io.IOException;
+import java.net.URI;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -90,8 +92,8 @@ class SivaValidationServiceErrorHandlerTest {
     }
 
     @Test
-    void givenUserErrorStatusCodeWillLogWarnErrorMessage() throws Exception {
-        errorHandler.handleError(new MockClientHttpResponse(EMPTY_BODY, HttpStatus.BAD_REQUEST));
+    void handleError_WhenCalled_ThenLogsErrorMessageWithUrlMethodAndStatusCode() throws Exception {
+        errorHandler.handleError(new URI("localhost:8080"), HttpMethod.GET, new MockClientHttpResponse(EMPTY_BODY, HttpStatus.BAD_REQUEST));
         verify(mockAppender).doAppend(captorLoggingEvent.capture());
 
         final LoggingEvent loggingEvent = captorLoggingEvent.getValue();
