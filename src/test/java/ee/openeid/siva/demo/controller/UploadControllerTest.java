@@ -16,7 +16,6 @@
 
 package ee.openeid.siva.demo.controller;
 
-import ac.simons.spring.boot.wro4j.Wro4jAutoConfiguration;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -24,6 +23,7 @@ import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.Appender;
 import ee.openeid.siva.demo.cache.UploadFileCacheService;
 import ee.openeid.siva.demo.cache.UploadedFile;
+import ee.openeid.siva.demo.ci.info.BuildInfoFileLoader;
 import org.htmlunit.WebClient;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,14 +32,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -58,9 +58,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 @WebMvcTest(UploadController.class)
-@ImportAutoConfiguration({Wro4jAutoConfiguration.class})
 class UploadControllerTest {
 
     @Autowired
@@ -71,6 +70,12 @@ class UploadControllerTest {
 
     @Autowired
     private WebClient webClient;
+
+    @MockitoBean
+    private BuildInfoFileLoader buildInfoFileLoader;
+
+    @MockitoBean
+    private CacheManager cacheManager;
 
     @MockitoBean
     private ValidationTaskRunner taskRunner;

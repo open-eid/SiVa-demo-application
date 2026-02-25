@@ -1,0 +1,210 @@
+<!--
+  ~ Copyright 2026 Riigi Infosüsteemi Amet
+  ~
+  ~ Licensed under the EUPL, Version 1.1 or – as soon they will be approved by
+  ~ the European Commission - subsequent versions of the EUPL (the "Licence");
+  ~ You may not use this work except in compliance with the Licence.
+  ~ You may obtain a copy of the Licence at:
+  ~
+  ~ https://joinup.ec.europa.eu/software/page/eupl
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software distributed under the Licence is
+  ~ distributed on an "AS IS" basis,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the Licence for the specific language governing permissions and limitations under the Licence.
+  -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>SiVA Demo Application</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.1/dist/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/webjars/dropzone/5.9.2/dropzone.css}">
+    <link rel="stylesheet" th:href="@{/webjars/highlightjs/9.4.0/styles/dark.css}">
+    <link rel="stylesheet" th:href="@{/css/desert.css}">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+</head>
+<body>
+<div id="notification" class="alert alert-warning hide" role="alert">
+    <button class="close" type="button" data-dismiss="alert">×</button>
+    <strong>Warning!&nbsp;</strong>Content uploaded to SiVa demo validation service may be visible to third parties.
+    Upload only content that does not contain confidential information.
+</div>
+<nav id="top-navbar" class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <img class="d-inline-block align-top" th:src="@{/img/open-eid-logo.svg}" alt="eid-logo"/>
+            SiVa Demo Application
+        </a>
+    </div>
+</nav>
+<div class="container" id="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row mb-2">
+                <div class="col-lg-10">
+                    <h5>This is a demo interface for testing RIA's digital signature validation service SiVa. The
+                        service validates digital signatures made with both test and live components.</h5>
+                    <h5>The service does not distinguish test signatures. RIA does not take responsibility for the
+                        availability of the interface nor the veracity of the validation result.</h5>
+                    <h5>
+                        <a href="https://www.ria.ee/en/state-information-system/electronic-identity-eid-and-trust-services/services-digital-signatures">Read
+                            more about validation service and digital signature gateway service</a></h5>
+                </div>
+                <div class="col-lg-2 d-none d-lg-block">
+                    <img class="img-fluid" th:src="@{/img/eu-logo.svg}"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="mb-2 col-sm-6 col-lg-4 col-xl-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="policy-select">Validation policy</label>
+                        </div>
+                        <select class="custom-select" id="policy-select" aria-describedby="policy-addon">
+                            <option value="">default</option>
+                            <option value="POLv3">POLv3</option>
+                            <option value="POLv4">POLv4</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-2 col-sm-6 col-lg-4 col-xl-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="report-select">Report type</label>
+                        </div>
+                        <select class="custom-select" id="report-select" aria-describedby="report-addon">
+                            <option value="">default</option>
+                            <option value="Simple">Simple</option>
+                            <option value="Detailed">Detailed</option>
+                            <option value="Diagnostic">Diagnostic</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-2 col-sm-6 col-lg-4 col-xl-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="type-select">Validation type</label>
+                        </div>
+                        <select class="custom-select" id="type-select" aria-describedby="type-addon">
+                            <option value="">default</option>
+                            <option value="Container">Container</option>
+                            <option value="Hashcode">Hashcode</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-2 col-sm-6 col-lg-4 col-xl-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="return-data-files">Return Data Files</label>
+                        </div>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <input id="return-data-files" type="checkbox"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row hide" id="error">
+                <div class="col-md-12">
+                    <h1>Error</h1>
+                    <pre class="alert alert-warning" id="request-error"></pre>
+                </div>
+            </div>
+
+            <div class="row top-buffer">
+                <div class="col-md-12">
+                    <form id="siva-dropzone" class="dropzone" action="upload" style="width: 100%" method="POST"
+                          enctype="multipart/form-data">
+                        <input class="hide" type="file" name="file"/>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row hide" id="validation-summery">
+                <div class="col-md-12">
+                    <h1>Overall validation result</h1>
+                    <p>Document&nbsp;
+                        <strong id="document-name"></strong>
+                        &nbsp;is&nbsp;
+                        <strong id="overall-validation-result" class="validation-result"></strong>
+                    </p>
+                </div>
+            </div>
+
+            <div class="row hide" id="validation-warnings">
+                <div class="col-md-12">
+                    <h4>Validation warnings</h4>
+                    <ul class="validation-warning" id="validation-warning-rows"></ul>
+                </div>
+            </div>
+
+            <div class="row hide" id="result-area">
+                <div class="col-md-12">
+                    <h1>Validation report</h1>
+                    <ul id="response-tabs" class="nav nav-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" href="#json" aria-controls="json" role="tab" data-toggle="tab">JSON</a>
+                        </li>
+                        <li class="nav-item" role="presentation" id="json-data-files-link">
+                            <a class="nav-link" href="#json-data-files" aria-controls="json-data-files" role="tab"
+                               data-toggle="tab">JSON Data Files</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="json" class="tab-pane active" role="tabpanel">
+                            <pre><code class="json" id="validation-report"></code></pre>
+                        </div>
+                        <div id="json-data-files" class="tab-pane" role="tabpanel">
+                            <pre><code class="json" id="json-data-files-report"></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="row footer">
+                <div class="col-lg-6 float-lg-left d-none d-lg-block">
+                    <span><a href="https://open-eid.github.io/SiVa/" target="_blank">SiVa Documentation&nbsp;</a></span>
+                    <th:block th:if="${buildInfo.github != null}">
+                <span>Git commit:&nbsp;
+                    <a th:href="${buildInfo.github.url}" target="_blank" th:text="${buildInfo.github.shortHash}"></a>
+                    &nbsp;by&nbsp;
+                </span>
+                        <span th:text="${buildInfo.github.authorName}"></span>
+                        <span>&nbsp;. TravisCI build number:&nbsp;
+                    <a th:href="${buildInfo.travisCi.buildUrl}" target="_blank"
+                       th:text="${buildInfo.travisCi.buildNumber}"></a>
+                </span>
+                    </th:block>
+                </div>
+                <div class="col-lg-6 col-md-12 float-lg-right text-lg-right text-md-center footer-icons">
+                    <a class="footer-social" href="https://www.facebook.com/riigiinfosysteemiamet/" target="_blank">
+                        <img class="img-fluid" th:src="@{/img/social/Facebook.svg}"
+                             alt="Facebook Riigi Infosüsteemi Amet"/>
+                    </a>
+                    <a class="footer-social" href="https://github.com/open-eid/SiVa" target="_blank">
+                        <img class="img-fluid" th:src="@{/img/social/Github.svg}" alt="Github project"/>
+                    </a>
+                    <a class="footer-social d-md-none" href="/">
+                        <img class="img-fluid" th:src="@{/img/eu-logo.svg}" alt="EU Supported project Logo"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/webjars/jquery/3.6.1/dist/jquery.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.5.1/dist/js/bootstrap.js}"></script>
+<script th:src="@{/webjars/dropzone/5.9.2/dropzone.js}"></script>
+<script th:src="@{/webjars/js-cookie/2.2.0/src/js.cookie.js}"></script>
+<script th:src="@{/webjars/highlightjs/9.4.0/highlight.pack.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+</body>
+</html>
