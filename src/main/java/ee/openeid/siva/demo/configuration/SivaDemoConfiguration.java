@@ -16,8 +16,6 @@
 
 package ee.openeid.siva.demo.configuration;
 
-import ee.openeid.siva.demo.ci.info.BuildInfo;
-import ee.openeid.siva.demo.ci.info.FilesystemBuildInfoFileLoader;
 import ee.openeid.siva.demo.monitoring.util.ManifestReader;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -39,18 +37,15 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableConfigurationProperties({
         SivaServiceProperties.class,
-        BuildInfoProperties.class
 })
 @RequiredArgsConstructor
 public class SivaDemoConfiguration {
-    private final BuildInfoProperties properties;
     private final SivaServiceProperties proxyProperties;
 
     @Bean
@@ -87,12 +82,5 @@ public class SivaDemoConfiguration {
                 .build();
 
         return restTemplateBuilder.requestFactory(() -> new HttpComponentsClientHttpRequestFactory(httpClient));
-    }
-
-    @Bean
-    public BuildInfo displayBuildInfo() throws IOException {
-        final FilesystemBuildInfoFileLoader buildInfoFileLoader = new FilesystemBuildInfoFileLoader();
-        buildInfoFileLoader.setProperties(properties);
-        return buildInfoFileLoader.loadBuildInfo();
     }
 }

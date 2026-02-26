@@ -171,17 +171,6 @@
             <div class="row footer">
                 <div class="col-lg-6 float-lg-left d-none d-lg-block">
                     <span><a href="https://open-eid.github.io/SiVa/" target="_blank">SiVa Documentation&nbsp;</a></span>
-                    <th:block th:if="${buildInfo.github != null}">
-                <span>Git commit:&nbsp;
-                    <a th:href="${buildInfo.github.url}" target="_blank" th:text="${buildInfo.github.shortHash}"></a>
-                    &nbsp;by&nbsp;
-                </span>
-                        <span th:text="${buildInfo.github.authorName}"></span>
-                        <span>&nbsp;. TravisCI build number:&nbsp;
-                    <a th:href="${buildInfo.travisCi.buildUrl}" target="_blank"
-                       th:text="${buildInfo.travisCi.buildNumber}"></a>
-                </span>
-                    </th:block>
                 </div>
                 <div class="col-lg-6 col-md-12 float-lg-right text-lg-right text-md-center footer-icons">
                     <a class="footer-social" href="https://www.facebook.com/riigiinfosysteemiamet/" target="_blank">

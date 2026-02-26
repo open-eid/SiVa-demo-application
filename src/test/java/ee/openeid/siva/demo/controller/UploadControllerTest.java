@@ -23,7 +23,6 @@ import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.Appender;
 import ee.openeid.siva.demo.cache.UploadFileCacheService;
 import ee.openeid.siva.demo.cache.UploadedFile;
-import ee.openeid.siva.demo.ci.info.BuildInfoFileLoader;
 import org.htmlunit.WebClient;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,9 +69,6 @@ class UploadControllerTest {
 
     @Autowired
     private WebClient webClient;
-
-    @MockitoBean
-    private BuildInfoFileLoader buildInfoFileLoader;
 
     @MockitoBean
     private CacheManager cacheManager;
