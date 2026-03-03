@@ -28,3 +28,10 @@ spring:
   cache:
     caffeine:
       spec: maximumSize=100,expireAfterAccess=20s
+  web:
+    resources:
+      chain:
+        strategy:
+          content:
+            enabled: true
+            paths: /js/**, /css/**, /vendor/**

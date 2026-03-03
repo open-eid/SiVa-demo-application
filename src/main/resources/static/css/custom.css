@@ -72,11 +72,22 @@
     margin: 0 .5em 0 0;
     height: auto;
     max-width: 3%;
+    vertical-align: middle;
 }
 
 .footer a {
     color: rgba(0, 0, 0, 0.5);
     font-size: .9em;
+    text-decoration: none;
+}
+
+.footer a:not(.footer-social):hover {
+    text-decoration: underline;
+}
+
+a.external-info-link:hover,
+a.external-info-link:focus {
+    text-decoration: underline !important;
 }
 
 #top-navbar {
@@ -105,6 +116,13 @@
 
 #content {
     margin-top: 1em;
+}
+
+/* Preserve Bootstrap 4 xl container width for visual parity after Bootstrap 5 migration */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
 }
 
 @media screen and (max-width: 768px) {

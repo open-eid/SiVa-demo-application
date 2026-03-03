@@ -21,15 +21,15 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.1/dist/css/bootstrap.css}">
-    <link rel="stylesheet" th:href="@{/webjars/dropzone/5.9.2/dropzone.css}">
-    <link rel="stylesheet" th:href="@{/webjars/highlightjs/9.4.0/styles/dark.css}">
+    <link rel="stylesheet" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/vendor/dropzone/dropzone.css}">
+    <link rel="stylesheet" th:href="@{/vendor/highlightjs/styles/dark.min.css}">
     <link rel="stylesheet" th:href="@{/css/desert.css}">
     <link rel="stylesheet" th:href="@{/css/custom.css}">
 </head>
 <body>
-<div id="notification" class="alert alert-warning hide" role="alert">
-    <button class="close" type="button" data-dismiss="alert">×</button>
+<div id="notification" class="alert alert-warning alert-dismissible fade show hide" role="alert">
+    <button class="btn-close" type="button" aria-label="Close"></button>
     <strong>Warning!&nbsp;</strong>Content uploaded to SiVa demo validation service may be visible to third parties.
     Upload only content that does not contain confidential information.
 </div>
@@ -51,7 +51,7 @@
                     <h5>The service does not distinguish test signatures. RIA does not take responsibility for the
                         availability of the interface nor the veracity of the validation result.</h5>
                     <h5>
-                        <a href="https://www.ria.ee/en/state-information-system/electronic-identity-eid-and-trust-services/services-digital-signatures">Read
+                        <a class="external-info-link text-decoration-none" href="https://www.ria.ee/en/state-information-system/electronic-identity-eid-and-trust-services/services-digital-signatures" target="_blank" rel="noopener noreferrer">Read
                             more about validation service and digital signature gateway service</a></h5>
                 </div>
                 <div class="col-lg-2 d-none d-lg-block">
@@ -62,10 +62,8 @@
             <div class="row">
                 <div class="mb-2 col-sm-6 col-lg-4 col-xl-3">
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="policy-select">Validation policy</label>
-                        </div>
-                        <select class="custom-select" id="policy-select" aria-describedby="policy-addon">
+                        <label class="input-group-text" for="policy-select">Validation policy</label>
+                        <select class="form-select" id="policy-select" aria-describedby="policy-addon">
                             <option value="">default</option>
                             <option value="POLv3">POLv3</option>
                             <option value="POLv4">POLv4</option>
@@ -74,10 +72,8 @@
                 </div>
                 <div class="mb-2 col-sm-6 col-lg-4 col-xl-3">
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="report-select">Report type</label>
-                        </div>
-                        <select class="custom-select" id="report-select" aria-describedby="report-addon">
+                        <label class="input-group-text" for="report-select">Report type</label>
+                        <select class="form-select" id="report-select" aria-describedby="report-addon">
                             <option value="">default</option>
                             <option value="Simple">Simple</option>
                             <option value="Detailed">Detailed</option>
@@ -87,10 +83,8 @@
                 </div>
                 <div class="mb-2 col-sm-6 col-lg-4 col-xl-3">
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="type-select">Validation type</label>
-                        </div>
-                        <select class="custom-select" id="type-select" aria-describedby="type-addon">
+                        <label class="input-group-text" for="type-select">Validation type</label>
+                        <select class="form-select" id="type-select" aria-describedby="type-addon">
                             <option value="">default</option>
                             <option value="Container">Container</option>
                             <option value="Hashcode">Hashcode</option>
@@ -99,14 +93,10 @@
                 </div>
                 <div class="mb-2 col-sm-6 col-lg-4 col-xl-3">
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="return-data-files">Return Data Files</label>
-                        </div>
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <input id="return-data-files" type="checkbox"/>
-                            </div>
-                        </div>
+                        <label class="input-group-text" for="return-data-files">Return Data Files</label>
+                        <span class="input-group-text">
+                            <input id="return-data-files" type="checkbox"/>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -150,29 +140,28 @@
                     <h1>Validation report</h1>
                     <ul id="response-tabs" class="nav nav-tabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" href="#json" aria-controls="json" role="tab" data-toggle="tab">JSON</a>
+                            <a class="nav-link active" href="#json" aria-controls="json" role="tab">JSON</a>
                         </li>
                         <li class="nav-item" role="presentation" id="json-data-files-link">
-                            <a class="nav-link" href="#json-data-files" aria-controls="json-data-files" role="tab"
-                               data-toggle="tab">JSON Data Files</a>
+                            <a class="nav-link" href="#json-data-files" aria-controls="json-data-files" role="tab">JSON Data Files</a>
                         </li>
                     </ul>
                     <div class="tab-content">
                         <div id="json" class="tab-pane active" role="tabpanel">
-                            <pre><code class="json" id="validation-report"></code></pre>
+                            <pre><code class="language-json" id="validation-report"></code></pre>
                         </div>
                         <div id="json-data-files" class="tab-pane" role="tabpanel">
-                            <pre><code class="json" id="json-data-files-report"></code></pre>
+                            <pre><code class="language-json" id="json-data-files-report"></code></pre>
                         </div>
                     </div>
                 </div>
             </div>
             <hr/>
             <div class="row footer">
-                <div class="col-lg-6 float-lg-left d-none d-lg-block">
+                <div class="col-lg-6 float-lg-start d-none d-lg-block">
                     <span><a href="https://open-eid.github.io/SiVa/" target="_blank">SiVa Documentation&nbsp;</a></span>
                 </div>
-                <div class="col-lg-6 col-md-12 float-lg-right text-lg-right text-md-center footer-icons">
+                <div class="col-lg-6 col-md-12 float-lg-end text-lg-end text-md-center footer-icons">
                     <a class="footer-social" href="https://www.facebook.com/riigiinfosysteemiamet/" target="_blank">
                         <img class="img-fluid" th:src="@{/img/social/Facebook.svg}"
                              alt="Facebook Riigi Infosüsteemi Amet"/>
@@ -189,11 +178,8 @@
     </div>
 </div>
 
-<script th:src="@{/webjars/jquery/3.6.1/dist/jquery.js}"></script>
-<script th:src="@{/webjars/bootstrap/4.5.1/dist/js/bootstrap.js}"></script>
-<script th:src="@{/webjars/dropzone/5.9.2/dropzone.js}"></script>
-<script th:src="@{/webjars/js-cookie/2.2.0/src/js.cookie.js}"></script>
-<script th:src="@{/webjars/highlightjs/9.4.0/highlight.pack.js}"></script>
+<script th:src="@{/vendor/dropzone/dropzone.js}"></script>
+<script th:src="@{/vendor/highlightjs/highlight.min.js}"></script>
 <script th:src="@{/js/custom.js}"></script>
 </body>
 </html>

@@ -1,0 +1,13 @@
+{
+  "name": "siva-demo-application-frontend-vendor",
+  "private": true,
+  "packageManager": "pnpm@11.5.1",
+  "scripts": {
+    "build:vendor": "node tools/copy-vendor.mjs"
+  },
+  "dependencies": {
+    "@highlightjs/cdn-assets": "11.11.1",
+    "bootstrap": "5.3.8",
+    "dropzone": "5.9.3"
+  }
+}
