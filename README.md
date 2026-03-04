@@ -20,6 +20,7 @@ These are minimum requirements to build and develop SiVa demo project:
 
 * **git** - to easily download and update code. You can [download git here](https://git-scm.com/)
 * **Java JDK 17** - to compile and run SiVa demo
+* **Node.js (LTS)** - to install and copy frontend vendor assets
 * **IDE** - to develop SiVa. We recommend to use [JetBrains IntelliJ](https://www.jetbrains.com/idea/)
 * Optionally You can also install **Maven** but it is not needed because SiVa project uses Maven wrapper to install maven
 * **SiVa parent project** - Can be found [here](https://github.com/open-eid/SiVa)
@@ -28,8 +29,16 @@ These are minimum requirements to build and develop SiVa demo project:
 
 ### Using Maven Wrapper
 
-Recommended way of building this project is using [Maven Wrapper](https://github.com/takari/maven-wrapper).
-Run the following command:
+Recommended way of building this project is using [Maven Wrapper](https://github.com/takari/maven-wrapper) and
+[pnpm](https://pnpm.io/installation).
+First install frontend dependencies and copy vendor assets, then run Maven build:
+
+```bash
+pnpm install
+pnpm run build:vendor
+```
+
+Then run the following command:
 
 ```bash
 ./mvnw clean install
