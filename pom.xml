@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.3</version>
+        <version>4.0.4</version>
     </parent>
 
     <artifactId>siva-demo-application</artifactId>
@@ -53,8 +53,6 @@
         <!-- Override vulnerable transitive dependencies -->
         <!-- TODO: review this list whenever Spring Boot or direct dependencies are updated -->
         <commons-lang3.version>3.20.0</commons-lang3.version><!-- CVE-2025-48924 -->
-        <jackson-bom.version>3.1.0</jackson-bom.version> <!-- CVE-2026-29062 -->
-        <jackson-2-bom.version>2.21.1</jackson-2-bom.version> <!-- CVE-2026-29062 -->
 
         <!-- Property values here can be overridden from command line, but plugin <configuration> values below can't be -->
         <imageName>${project.artifactId}:latest</imageName>
