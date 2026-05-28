@@ -35,24 +35,19 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <bootstrap.version>4.5.1</bootstrap.version>
-        <caffeine.version>3.2.3</caffeine.version>
-        <commons-io.version>2.21.0</commons-io.version>
-        <dropzone.version>5.9.2</dropzone.version>
-        <highlightjs.version>9.4.0</highlightjs.version>
+        <caffeine.version>3.2.4</caffeine.version>
+        <commons-io.version>2.22.0</commons-io.version>
         <jcabi-manifests.version>2.2.0</jcabi-manifests.version>
-        <jquery.version>3.6.1</jquery.version>
-        <js-cookie.version>2.2.0</js-cookie.version>
-        <json.version>20251224</json.version>
+        <json.version>20260522</json.version>
         <zt-zip.version>1.17</zt-zip.version>
 
         <license-maven-plugin.version>2.7.0</license-maven-plugin.version>
-        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
-        <maven-war-plugin.version>3.4.0</maven-war-plugin.version>
+        <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
+        <maven-war-plugin.version>3.5.1</maven-war-plugin.version>
 
         <!-- Override vulnerable transitive dependencies -->
         <!-- TODO: review this list whenever Spring Boot or direct dependencies are updated -->
-
+        <tomcat.version>11.0.22</tomcat.version> <!-- CVE-2026-43512 -->
         <!-- Property values here can be overridden from command line, but plugin <configuration> values below can't be -->
         <imageName>${project.artifactId}:latest</imageName>
         <githubMirror>https://github.com</githubMirror>
