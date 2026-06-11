@@ -20,7 +20,8 @@ These are minimum requirements to build and develop SiVa demo project:
 
 * **git** - to easily download and update code. You can [download git here](https://git-scm.com/)
 * **Java JDK 17** - to compile and run SiVa demo
-* **Node.js (LTS)** - to install and copy frontend vendor assets
+* **Node.js 22 or later** - required by pnpm 11 to install and copy frontend vendor assets
+* **pnpm 11** - to install and copy frontend vendor assets. You can [install pnpm here](https://pnpm.io/installation)
 * **IDE** - to develop SiVa. We recommend to use [JetBrains IntelliJ](https://www.jetbrains.com/idea/)
 * Optionally You can also install **Maven** but it is not needed because SiVa project uses Maven wrapper to install maven
 * **SiVa parent project** - Can be found [here](https://github.com/open-eid/SiVa)
@@ -29,9 +30,11 @@ These are minimum requirements to build and develop SiVa demo project:
 
 ### Using Maven Wrapper
 
-Recommended way of building this project is using [Maven Wrapper](https://github.com/takari/maven-wrapper) and
-[pnpm](https://pnpm.io/installation).
-First install frontend dependencies and copy vendor assets, then run Maven build:
+Recommended way of building this project is using [Maven Wrapper](https://github.com/takari/maven-wrapper) and pnpm.
+
+Frontend vendor assets are not stored in the repository and must be generated locally.
+Run the following pnpm commands on first build, and again whenever frontend dependencies change 
+(i.e. `package.json` is updated):
 
 ```bash
 pnpm install
