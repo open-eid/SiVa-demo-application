@@ -31,7 +31,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -64,7 +63,7 @@ public class SivaDemoConfiguration {
     private RestTemplateBuilder getBaseSslRestTemplateBuilder(RestTemplateBuilder restTemplateBuilder) {
         SSLContext sslContext = new SSLContextBuilder()
                 .loadTrustMaterial(
-                        new ClassPathResource(proxyProperties.getTrustStore()).getURL(),
+                        proxyProperties.getTrustStore().getURL(),
                         proxyProperties.getTrustStorePassword().toCharArray())
                 .build();
         SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext,

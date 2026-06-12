@@ -18,6 +18,8 @@ package ee.openeid.siva.demo.configuration;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 @Data
 @ConfigurationProperties(prefix = "siva.service")
@@ -27,7 +29,7 @@ public class SivaServiceProperties {
     private String hashcodeServicePath = "/validateHashcode";
     private String dataFilesServicePath = "/getDataFiles";
     private String serviceHost = DEFAULT_SERVICE_URL;
-    private String trustStore = "siva_server_truststore.p12";
+    private Resource trustStore = new ClassPathResource("siva_server_truststore.p12");
     @SuppressWarnings("squid:S2068") //default password
     private String trustStorePassword = "password";
 }
