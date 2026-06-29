@@ -30,6 +30,7 @@ public class SivaServiceProperties {
     private String dataFilesServicePath = "/getDataFiles";
     private String serviceHost = DEFAULT_SERVICE_URL;
     private Resource trustStore = new ClassPathResource("siva_server_truststore.p12");
+    private String trustStoreType = "PKCS12";
     @SuppressWarnings("squid:S2068") //default password
     private String trustStorePassword = "password";
 }

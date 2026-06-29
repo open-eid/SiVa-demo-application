@@ -36,7 +36,13 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -62,9 +68,7 @@ public class SivaDemoConfiguration {
     @SneakyThrows
     private RestTemplateBuilder getBaseSslRestTemplateBuilder(RestTemplateBuilder restTemplateBuilder) {
         SSLContext sslContext = new SSLContextBuilder()
-                .loadTrustMaterial(
-                        proxyProperties.getTrustStore().getURL(),
-                        proxyProperties.getTrustStorePassword().toCharArray())
+                .loadTrustMaterial(loadTrustStore(proxyProperties), null)
                 .build();
         SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext,
                 NoopHostnameVerifier.INSTANCE);
@@ -81,5 +85,20 @@ public class SivaDemoConfiguration {
                 .build();
 
         return restTemplateBuilder.requestFactory(() -> new HttpComponentsClientHttpRequestFactory(httpClient));
+    }
+
+    private static KeyStore loadTrustStore(SivaServiceProperties properties) {
+        KeyStore keyStore;
+        try {
+            keyStore = KeyStore.getInstance(properties.getTrustStoreType());
+        } catch (KeyStoreException e) {
+            throw new IllegalStateException("Failed to create trust-store of type: " + properties.getTrustStoreType(), e);
+        }
+        try (InputStream inputStream = properties.getTrustStore().getInputStream()) {
+            keyStore.load(inputStream, properties.getTrustStorePassword().toCharArray());
+        } catch (IOException | CertificateException | NoSuchAlgorithmException e) {
+            throw new IllegalStateException("Failed to load trust-store: " + properties.getTrustStore(), e);
+        }
+        return keyStore;
     }
 }
