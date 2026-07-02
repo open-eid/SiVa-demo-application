@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.6</version>
+        <version>4.1.0</version>
     </parent>
 
     <artifactId>siva-demo-application</artifactId>
@@ -39,9 +39,9 @@
         <commons-io.version>2.22.0</commons-io.version>
         <jcabi-manifests.version>2.2.0</jcabi-manifests.version>
         <json.version>20260522</json.version>
-        <zt-zip.version>1.17</zt-zip.version>
+        <zt-zip.version>1.18.1</zt-zip.version>
 
-        <license-maven-plugin.version>2.7.0</license-maven-plugin.version>
+        <license-maven-plugin.version>2.7.1</license-maven-plugin.version>
         <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
         <maven-war-plugin.version>3.5.1</maven-war-plugin.version>
 
