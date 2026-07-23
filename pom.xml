@@ -42,7 +42,7 @@
         <zt-zip.version>1.18.2</zt-zip.version>
 
         <license-maven-plugin.version>2.7.1</license-maven-plugin.version>
-        <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
+        <maven-jar-plugin.version>3.5.1</maven-jar-plugin.version>
         <maven-war-plugin.version>3.5.1</maven-war-plugin.version>
 
         <!-- Override vulnerable transitive dependencies -->
