@@ -35,7 +35,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <caffeine.version>3.2.4</caffeine.version>
+        <caffeine.version>3.3.0</caffeine.version>
         <commons-io.version>2.22.0</commons-io.version>
         <jcabi-manifests.version>2.2.0</jcabi-manifests.version>
         <json.version>20260522</json.version>
